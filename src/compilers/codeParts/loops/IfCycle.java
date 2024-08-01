@@ -8,7 +8,7 @@ import compilers.codeParts.otherLogics.Jump;
 
 import java.util.List;
 
-public class IfCycle extends ComplexCodePart {
+public class IfCycle extends CycleCodePart {
     ComplexOperation condition;
     public IfCycle(ComplexOperation condition, List<CodePart> insideCode) {
         super(insideCode);
@@ -27,11 +27,6 @@ public class IfCycle extends ComplexCodePart {
         int jumpLine = previousCPLastLineIndex + linesCount + 1;
         allCycleCodeParts.add(new Jump(Jump.BoolOperationType.equal, condition.finalVarName, "false", jumpLine));
         allCycleCodeParts.addAll(insideCode);
-        StringBuilder resultCode = new StringBuilder();
-        for(int i = 0; i < allCycleCodeParts.size(); i++){
-            CodePart codePart = allCycleCodeParts.get(i);
-            resultCode.append(codePart.getAsCompiledCode(previousCPLastLineIndex + i - 1, nameSpaceIndex, compilerData));
-        }
-        return resultCode.toString();
+        return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, compilerData);
     }
 }

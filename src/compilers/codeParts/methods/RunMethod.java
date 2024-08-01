@@ -5,9 +5,15 @@ import compilers.codeParts.CodePart;
 import compilers.codeParts.SingleLineCodePart;
 import usefulMethods.PairIntString;
 
-public class RunMethod  extends CodePart {
-    protected RunMethod(int compiled_space) {
+import java.util.List;
 
+public class RunMethod  extends CodePart {
+    String returnVar, methodName;
+    int methodIndex;
+    List<String> args;
+    protected RunMethod(String methodName, List<String> args) {
+        this.methodName = methodName;
+        this.args = args;
     }
 
     @Override

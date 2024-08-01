@@ -16,7 +16,7 @@ public interface NameSpacesMethods {
     }
     public static boolean isVarName(String name, List<String> globalVars){
         name = name.replace(" ", "");
-        return !isLinkedBlockName(name) && !isNumeric(name) && !globalVars.contains(name) && !isHelpVar(name) && !systemWords.contains(name);
+        return !isLinkedBlockName(name) && !isNumeric(name) && !globalVars.contains(name) && !isSystemWord(name) && !mindustrySystemWords.contains(name);
     }
     public static boolean isLinkedBlockName(String name){
         name = name.replace(" ", "");
@@ -44,7 +44,7 @@ public interface NameSpacesMethods {
         }
         return true;
     }
-    public static boolean isHelpVar(String name){
+    public static boolean isSystemWord(String name){
         name = name.replace(" ", "");
         if(!numbers.contains(String.valueOf(name.charAt(name.length()-1)))){return false;}
         int index = name.length() - 1;
@@ -58,6 +58,6 @@ public interface NameSpacesMethods {
         for (int i = 0; i <= index; i ++){
             word.append(name.charAt(i));
         }
-        return word.toString().equals("help");
+        return systemWords.contains(word.toString());
     }
 }

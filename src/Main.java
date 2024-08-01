@@ -1,4 +1,5 @@
 import compilers.Compiler;
+import compilers.CompilerData;
 import compilers.UncompiledCode;
 import compilers.codeParts.CodePart;
 import compilers.codeParts.loops.IfCycle;
@@ -26,6 +27,7 @@ public class Main {
                         new Set("c", "10")
                 ))
         );
+        Set setCodePart = new Set("var1", "112");
         System.out.println(Compiler.compile(code));
     }
 }

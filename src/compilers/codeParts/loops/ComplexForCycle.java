@@ -8,7 +8,7 @@ import compilers.codeParts.ComplexCodePart;
 import compilers.codeParts.math.ComplexOperation;
 import compilers.codeParts.otherLogics.Jump;
 
-public class ComplexForCycle extends ComplexCodePart {
+public class ComplexForCycle extends CycleCodePart {
     ComplexOperation startValue, operation, condition;
     public ComplexForCycle(ComplexOperation startValue, ComplexOperation operation, List<CodePart> insideCode, ComplexOperation condition) {
         super(insideCode);
@@ -33,11 +33,6 @@ public class ComplexForCycle extends ComplexCodePart {
         allCycleCodeParts.addAll(condition.insideOperations);
         int jumpLine = previousCPLastLineIndex+startValue.linesCount+1;
         allCycleCodeParts.add(new Jump(Jump.BoolOperationType.equal, condition.finalVarName, "true", jumpLine));
-        StringBuilder resultCode = new StringBuilder();
-        for(int i = 0; i < allCycleCodeParts.size(); i++){
-            CodePart codePart = allCycleCodeParts.get(i);
-            resultCode.append(codePart.getAsCompiledCode(previousCPLastLineIndex + i - 1, nameSpaceIndex, compilerData));
-        }
-        return resultCode.toString();
+        return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, compilerData);
     }
 }

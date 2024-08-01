@@ -5,6 +5,8 @@ import compilers.codeParts.math.Operation;
 
 import java.util.*;
 
+import static compilers.Settings.helpVarString;
+
 // все методы/функции должны быть удалены из выражения
 public interface MathematicalExpressionReader {
     //line expression
@@ -26,7 +28,7 @@ public interface MathematicalExpressionReader {
                                 mathUnits.get(operationIndex + 1).type != MathUnit.mathUnitType.wordOrValue) {
                             System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
                         }
-                        resultVarName = "help" + helpVarCount;
+                        resultVarName = helpVarString + helpVarCount;
                         operations.add(new Operation(
                                 mathUnits.get(operationIndex - 1).stringValue,
                                 mathUnits.get(operationIndex + 1).stringValue,
@@ -46,7 +48,7 @@ public interface MathematicalExpressionReader {
                                 mathUnits.get(operationIndex + 1).type != MathUnit.mathUnitType.wordOrValue) {
                             System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
                         }
-                        resultVarName = "help" + helpVarCount;
+                        resultVarName = helpVarString + helpVarCount;
                         operations.add(new Operation(
                                 resultVarName,
                                 mathUnits.get(operationIndex - 1).stringValue,
@@ -68,7 +70,7 @@ public interface MathematicalExpressionReader {
                             if (mathUnits.get(operationIndex + 1).type != MathUnit.mathUnitType.wordOrValue) {
                                 System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
                             }
-                            resultVarName = "help" + helpVarCount;
+                            resultVarName = helpVarString + helpVarCount;
                             operations.add(new Operation(
                                     resultVarName,
                                     mathUnits.get(operationIndex + 1).stringValue,

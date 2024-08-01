@@ -5,6 +5,9 @@ import java.util.List;
 
 public record Settings() {
     public static final String nameSpacePrefix = "ns";
+    public static final String methodReturnLineString = "methodReturnLine";
+    public static final String methodReturnVarNameString = "methodReturnVarName";
+    public static final String helpVarString = "help";
     public static final List<String> blockNames = List.of(
             "smelter", "crucible", "kiln", "press", "compressor", "press", "weaver",
             "smelter", "mixer", "mixer", "mixer", "melter", "separator", "disassembler", "press", "pulverizer",
@@ -21,8 +24,11 @@ public record Settings() {
             "constructor", "loader", "message", "switch", "processor", "display", "cell", "bank", "canvas", "pad", "accelerator"
             );
     public static final List<String> numbers = List.of("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-    public static final List<String> systemWords = List.of(
+    public static final List<String> mindustrySystemWords = List.of(
             "@counter", "@unit", "@this", "@time", "@tick", "@second", "@minute", "@waveNumber", "@waveTime", "@solid", "@blockCount",
             "@mapw", "@maph", "@links", "@ipt", "@thisx", "@thisy", "true", "false"
             );
+    public static final List<String> systemWords = List.of(
+            methodReturnLineString, methodReturnVarNameString, helpVarString
+    );
 }

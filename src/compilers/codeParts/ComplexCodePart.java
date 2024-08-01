@@ -1,13 +1,19 @@
 package compilers.codeParts;
 
+import compilers.CompilerData;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ComplexCodePart extends CodePart{
-    protected List<CodePart> insideCode = new ArrayList<CodePart>();
     protected List<CodePart> allCycleCodeParts = new ArrayList<CodePart>();
-    protected ComplexCodePart(List<CodePart> insideCode)
-    {
-        this.insideCode = insideCode;
+    public String getAllCycleCodePartsAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData){
+        StringBuilder resultCode = new StringBuilder();
+        for(int i = 0; i < allCycleCodeParts.size(); i++){
+            CodePart codePart = allCycleCodeParts.get(i);
+            resultCode.append(codePart.getAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, compilerData));
+            previousCPLastLineIndex += codePart.linesCount;
+        }
+        return resultCode.toString();
     }
 }

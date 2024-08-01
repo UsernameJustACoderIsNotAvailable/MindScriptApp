@@ -8,7 +8,7 @@ import compilers.codeParts.otherLogics.Jump;
 
 import java.util.List;
 
-public class WhileCycle extends ComplexCodePart {
+public class WhileCycle extends CycleCodePart {
     ComplexOperation condition;
     protected WhileCycle(List<CodePart> insideCode, ComplexOperation condition) {
         super(insideCode);
@@ -25,11 +25,6 @@ public class WhileCycle extends ComplexCodePart {
         allCycleCodeParts.addAll(condition.insideOperations);
         int jumpLine = previousCPLastLineIndex+1;
         allCycleCodeParts.add(new Jump(Jump.BoolOperationType.equal, condition.finalVarName, "true", jumpLine));
-        StringBuilder resultCode = new StringBuilder();
-        for(int i = 0; i < allCycleCodeParts.size(); i++){
-            CodePart codePart = allCycleCodeParts.get(i);
-            resultCode.append(codePart.getAsCompiledCode(previousCPLastLineIndex + i - 1, nameSpaceIndex, compilerData));
-        }
-        return resultCode.toString();
+        return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, compilerData);
     }
 }
