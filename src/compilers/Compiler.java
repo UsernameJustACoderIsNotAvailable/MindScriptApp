@@ -5,11 +5,12 @@ import compilers.codeParts.otherLogics.End;
 import usefulMethods.PairIntString;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class Compiler {
     public static String compile(UncompiledCode uncompiledCode){
-        CompilerData compilerData = new CompilerData(new ArrayList<String>());
+        CompilerData compilerData = new CompilerData(new ArrayList<>(), 0, new HashMap<>());
         StringBuilder compiledCode = new StringBuilder();
         int previousCPLastLineIndex = -1;
         //methods compile
