@@ -1,9 +1,7 @@
 package compilers.codeParts.otherLogics;
 
-import compilers.CompilerData;
-import compilers.codeParts.CodePart;
+import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
-import usefulMethods.PairIntString;
 
 public class Stop  extends SingleLineCodePart {
     Stop(){
@@ -11,7 +9,7 @@ public class Stop  extends SingleLineCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData){
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
         return "stop" + "\n";
     }
 }

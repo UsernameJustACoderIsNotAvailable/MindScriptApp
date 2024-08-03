@@ -1,22 +1,29 @@
 package compilers.codeParts;
 
+import compilers.UncompiledCode;
+
 import java.util.List;
 
 import static compilers.Settings.*;
 
 public interface NameSpacesMethods {
-    public static String getVarNameWithPrefix(String varName, int nameSpaceIndex, List<String> globalVars){
+    public static String getVarNameWithPrefix(String varName, int nameSpaceIndex, UncompiledCode uncompiledCode){
         varName = varName.replace(" ", "");
-        if(isVarName(varName, globalVars)){
+        if(isVarName(varName, uncompiledCode)){
             return nameSpacePrefix + nameSpaceIndex + varName;
         }
         else {
             return varName;
         }
     }
-    public static boolean isVarName(String name, List<String> globalVars){
+    public static boolean isVarName(String name, UncompiledCode uncompiledCode){
         name = name.replace(" ", "");
-        return !isLinkedBlockName(name) && !isNumeric(name) && !globalVars.contains(name) && !isSystemWord(name) && !mindustrySystemWords.contains(name);
+        return !isLinkedBlockName(name) &&
+                !isNumeric(name) &&
+                !uncompiledCode.globalVars.contains(name) &&
+                !isSystemWord(name) &&
+                !mindustrySystemWords.contains(name) &&
+                !hasPrefix(name);
     }
     public static boolean isLinkedBlockName(String name){
         name = name.replace(" ", "");
@@ -59,5 +66,15 @@ public interface NameSpacesMethods {
             word.append(name.charAt(i));
         }
         return systemWords.contains(word.toString());
+    }
+    public static boolean hasPrefix(String name){
+        if(name.length() <= nameSpacePrefix.length()){return false;}
+        for(int i = 0; i < nameSpacePrefix.length(); i++){
+            if(name.charAt(i) != nameSpacePrefix.charAt(i)){
+                return false;
+            }
+        }
+        if(!numbers.contains(String.valueOf(name.charAt(nameSpacePrefix.length())))){return false;}
+        return true;
     }
 }

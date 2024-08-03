@@ -1,6 +1,6 @@
 package compilers.codeParts.math;
 
-import compilers.CompilerData;
+import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
 
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
@@ -44,20 +44,20 @@ public class Operation extends SingleLineCodePart {
     }//унарные операции
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
         if(operationAssignment == operationIsAssignment.assignment){
             if (operator == operatorType.set){
                 return String.format("set %s %s",
-                        getVarNameWithPrefix(name, nameSpaceIndex, compilerData.globalVars),
-                        getVarNameWithPrefix(firstArg, nameSpaceIndex, compilerData.globalVars)
+                        getVarNameWithPrefix(name, nameSpaceIndex, uncompiledCode),
+                        getVarNameWithPrefix(firstArg, nameSpaceIndex, uncompiledCode)
                 ) + "\n";
             }
             else{
                 return String.format("op %s %s %s %s",
                         operator,
-                        getVarNameWithPrefix(name, nameSpaceIndex, compilerData.globalVars),
-                        getVarNameWithPrefix(name, nameSpaceIndex, compilerData.globalVars),
-                        getVarNameWithPrefix(firstArg, nameSpaceIndex, compilerData.globalVars)
+                        getVarNameWithPrefix(name, nameSpaceIndex, uncompiledCode),
+                        getVarNameWithPrefix(name, nameSpaceIndex, uncompiledCode),
+                        getVarNameWithPrefix(firstArg, nameSpaceIndex, uncompiledCode)
                 ) + "\n";
             }
         }
@@ -65,16 +65,16 @@ public class Operation extends SingleLineCodePart {
             if (operatorArg == operatorArgAmount.binary){
                 return String.format("op %s %s %s %s",
                         operator,
-                        getVarNameWithPrefix(name, nameSpaceIndex, compilerData.globalVars),
-                        getVarNameWithPrefix(firstArg, nameSpaceIndex, compilerData.globalVars),
-                        getVarNameWithPrefix(secondArg, nameSpaceIndex, compilerData.globalVars)
+                        getVarNameWithPrefix(name, nameSpaceIndex, uncompiledCode),
+                        getVarNameWithPrefix(firstArg, nameSpaceIndex, uncompiledCode),
+                        getVarNameWithPrefix(secondArg, nameSpaceIndex, uncompiledCode)
                 ) + "\n";
             }
             else if (operatorArg == operatorArgAmount.unary){
                 return String.format("op %s %s %s",
                         operator,
-                        getVarNameWithPrefix(name, nameSpaceIndex, compilerData.globalVars),
-                        getVarNameWithPrefix(firstArg, nameSpaceIndex, compilerData.globalVars)
+                        getVarNameWithPrefix(name, nameSpaceIndex, uncompiledCode),
+                        getVarNameWithPrefix(firstArg, nameSpaceIndex, uncompiledCode)
                 ) + "\n";
             }
         }

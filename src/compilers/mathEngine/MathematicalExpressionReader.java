@@ -14,6 +14,9 @@ public interface MathematicalExpressionReader {
         List<Operation> operations = new ArrayList<Operation>();
         List<MathUnit> mathUnits = divideLineExpression(expression, mathData);
         String resultVarName = null;
+        if(mathUnits.size() == 1 && mathUnits.get(0).type == MathUnit.mathUnitType.wordOrValue){
+            resultVarName = mathUnits.get(0).stringValue;
+        }
         for (int priority = 0; priority <= mathData.operationsPrioritiesCount; priority++) {
             int operationIndex = 0;
             while (operationIndex < mathUnits.size()) {

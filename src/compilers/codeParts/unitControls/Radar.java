@@ -1,9 +1,7 @@
 package compilers.codeParts.unitControls;
 
-import compilers.CompilerData;
-import compilers.codeParts.CodePart;
+import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
-import usefulMethods.PairIntString;
 
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 
@@ -63,14 +61,14 @@ public class Radar extends SingleLineCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData){
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
         return String.format("uradar %s %s %s %s 0 %s %s\n",
                 filter1.name(),
                 filter2.name(),
                 filter3.name(),
                 sortType.name(),
                 sortMode,
-                getVarNameWithPrefix(returnVarName, nameSpaceIndex, compilerData.globalVars)
+                getVarNameWithPrefix(returnVarName, nameSpaceIndex, uncompiledCode)
         ) + "\n";
     }
 }

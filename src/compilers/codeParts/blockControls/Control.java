@@ -1,8 +1,8 @@
 package compilers.codeParts.blockControls;
-import compilers.CompilerData;
-import compilers.codeParts.CodePart;
+import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
-import usefulMethods.PairIntString;
+
+import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 
 public class Control extends SingleLineCodePart {
     enum controlType{
@@ -39,13 +39,13 @@ public class Control extends SingleLineCodePart {
     }//shootp
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData){
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
         switch (type){
-            case enable -> {return String.format("control enabled %s %s", blockVarName, argument) + "\n";}
-            case config -> {return String.format("control config %s %s", blockVarName, argument) + "\n";}
-            case color -> {return String.format("control color %s %s", blockVarName, argument) + "\n";}
-            case shoot -> {return String.format("control shoot %s %s %s", x, y, shoot) + "\n";}
-            case shootp -> {return String.format("control shoot %s %s", unitVarName, shoot) + "\n";}
+            case enable -> {return String.format("control enabled %s %s", blockVarName, getVarNameWithPrefix(argument, nameSpaceIndex, uncompiledCode)) + "\n";}
+            case config -> {return String.format("control config %s %s", blockVarName, getVarNameWithPrefix(argument, nameSpaceIndex, uncompiledCode)) + "\n";}
+            case color -> {return String.format("control color %s %s", blockVarName, getVarNameWithPrefix(argument, nameSpaceIndex, uncompiledCode)) + "\n";}
+            case shoot -> {return String.format("control shoot %s %s %s", x, y, getVarNameWithPrefix(shoot, nameSpaceIndex, uncompiledCode)) + "\n";}
+            case shootp -> {return String.format("control shoot %s %s", unitVarName, getVarNameWithPrefix(shoot, nameSpaceIndex, uncompiledCode)) + "\n";}
         }
         return null;
     }

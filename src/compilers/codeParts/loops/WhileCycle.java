@@ -1,8 +1,7 @@
 package compilers.codeParts.loops;
 
-import compilers.CompilerData;
+import compilers.UncompiledCode;
 import compilers.codeParts.CodePart;
-import compilers.codeParts.ComplexCodePart;
 import compilers.codeParts.math.ComplexOperation;
 import compilers.codeParts.otherLogics.Jump;
 
@@ -20,11 +19,11 @@ public class WhileCycle extends CycleCodePart {
         linesCount += condition.linesCount;
     }
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
         allCycleCodeParts.addAll(insideCode);
         allCycleCodeParts.addAll(condition.insideOperations);
         int jumpLine = previousCPLastLineIndex+1;
         allCycleCodeParts.add(new Jump(Jump.BoolOperationType.equal, condition.finalVarName, "true", jumpLine));
-        return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, compilerData);
+        return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode);
     }
 }

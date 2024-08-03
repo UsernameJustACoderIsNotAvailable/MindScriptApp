@@ -1,9 +1,7 @@
 package compilers.codeParts.unitControls;
 
-import compilers.CompilerData;
-import compilers.codeParts.CodePart;
+import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
-import usefulMethods.PairIntString;
 
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 
@@ -127,61 +125,61 @@ public class Control extends SingleLineCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
         switch (controlType){
             case move, pathfind, mine -> {return String.format("ucontrol %s %s %s",
                     controlType.name(),
-                    getVarNameWithPrefix(x, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(y, nameSpaceIndex, compilerData.globalVars)
+                    getVarNameWithPrefix(x, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(y, nameSpaceIndex, uncompiledCode)
             ) + "\n";}
             case idle, stop, payDrop, payEnter, unbind, autoPathfind -> {return String.format("ucontrol %s", controlType.name()) + "\n";}
             case itemDrop -> {return String.format("ucontrol %s %s %s",
                     controlType.name(),
-                    getVarNameWithPrefix(blockVarName, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(amount, nameSpaceIndex, compilerData.globalVars)
+                    getVarNameWithPrefix(blockVarName, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(amount, nameSpaceIndex, uncompiledCode)
             );}
             case itemTake -> {return String.format("ucontrol %s %s %s %s", controlType.name(),
                     blockVarName,
-                    getVarNameWithPrefix(amount, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(otherVar, nameSpaceIndex, compilerData.globalVars)
+                    getVarNameWithPrefix(amount, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(otherVar, nameSpaceIndex, uncompiledCode)
             ) + "\n";}
             case targetp -> {return String.format("ucontrol %s %s %s",
                     controlType.name(),
-                    getVarNameWithPrefix(singleVar, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(otherVar, nameSpaceIndex, compilerData.globalVars)
+                    getVarNameWithPrefix(singleVar, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(otherVar, nameSpaceIndex, uncompiledCode)
             ) + "\n";}
             case target, approach -> {return String.format("ucontrol %s %s %s %s",
                     controlType.name(),
-                    getVarNameWithPrefix(x, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(y, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(otherVar, nameSpaceIndex, compilerData.globalVars)
+                    getVarNameWithPrefix(x, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(y, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(otherVar, nameSpaceIndex, uncompiledCode)
             ) + "\n";}
             case within -> {return String.format("ucontrol %s %s %s %s %s",
                     controlType.name(),
-                    getVarNameWithPrefix(x, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(y, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(otherVar, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(returnVarName, nameSpaceIndex, compilerData.globalVars)
+                    getVarNameWithPrefix(x, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(y, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(otherVar, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(returnVarName, nameSpaceIndex, uncompiledCode)
             ) + "\n";}
             case build -> {return String.format("ucontrol %s %s %s %s %s %s",
                     controlType.name(),
-                    getVarNameWithPrefix(x, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(y, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(blockVarName, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(singleVar, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(otherVar, nameSpaceIndex, compilerData.globalVars)
+                    getVarNameWithPrefix(x, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(y, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(blockVarName, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(singleVar, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(otherVar, nameSpaceIndex, uncompiledCode)
             ) + "\n";}
             case getBlock -> {return String.format("ucontrol %s %s %s %s %s %s",
                     controlType.name(),
-                    getVarNameWithPrefix(x, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(y, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(returnVarName, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(returnVarName2, nameSpaceIndex, compilerData.globalVars),
-                    getVarNameWithPrefix(returnVarName3, nameSpaceIndex, compilerData.globalVars)
+                    getVarNameWithPrefix(x, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(y, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(returnVarName, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(returnVarName2, nameSpaceIndex, uncompiledCode),
+                    getVarNameWithPrefix(returnVarName3, nameSpaceIndex, uncompiledCode)
             ) + "\n";}
             case flag, payTake, boost -> {return String.format("ucontrol %s %s",
                     controlType.name(),
-                    getVarNameWithPrefix(singleVar, nameSpaceIndex, compilerData.globalVars)
+                    getVarNameWithPrefix(singleVar, nameSpaceIndex, uncompiledCode)
             ) + "\n";}
         }
         return null;

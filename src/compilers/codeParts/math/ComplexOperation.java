@@ -1,6 +1,6 @@
 package compilers.codeParts.math;
 
-import compilers.CompilerData;
+import compilers.UncompiledCode;
 import compilers.codeParts.CodePart;
 
 import java.util.ArrayList;
@@ -39,11 +39,11 @@ public class ComplexOperation extends CodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
         StringBuilder resultCode = new StringBuilder();
         for(int i = 0; i < insideOperations.size(); i++){
             CodePart codePart = insideOperations.get(i);
-            resultCode.append(codePart.getAsCompiledCode(previousCPLastLineIndex + i - 1, nameSpaceIndex, compilerData));
+            resultCode.append(codePart.getAsCompiledCode(previousCPLastLineIndex + i - 1, nameSpaceIndex, uncompiledCode));
         }
         return resultCode.toString();
     }

@@ -1,9 +1,7 @@
 package compilers.codeParts.inputOutput;
 
-import compilers.CompilerData;
-import compilers.codeParts.CodePart;
+import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
-import usefulMethods.PairIntString;
 
 public class Print extends SingleLineCodePart {
     String text;
@@ -13,7 +11,7 @@ public class Print extends SingleLineCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData){
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
         return String.format("print %s", text) + "\n";
     }
 }

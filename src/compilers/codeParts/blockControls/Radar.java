@@ -1,9 +1,7 @@
 package compilers.codeParts.blockControls;
 
-import compilers.CompilerData;
-import compilers.codeParts.CodePart;
+import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
-import usefulMethods.PairIntString;
 
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 
@@ -63,15 +61,15 @@ public class Radar  extends SingleLineCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData){
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
         return String.format("radar %s %s %s %s %s %s %s",
                 filter1.name(),
                 filter2.name(),
                 filter3.name(),
                 sortType.name(),
-                getVarNameWithPrefix(blockVarName, nameSpaceIndex, compilerData.globalVars),
+                getVarNameWithPrefix(blockVarName, nameSpaceIndex, uncompiledCode),
                 sortMode,
-                getVarNameWithPrefix(returnVarName, nameSpaceIndex, compilerData.globalVars)
+                getVarNameWithPrefix(returnVarName, nameSpaceIndex, uncompiledCode)
         ) + "\n";
     }
 }

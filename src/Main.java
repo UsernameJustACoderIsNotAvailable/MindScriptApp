@@ -1,11 +1,9 @@
-import compilers.Compiler;
-import compilers.CompilerData;
 import compilers.UncompiledCode;
-import compilers.codeParts.CodePart;
 import compilers.codeParts.loops.IfCycle;
-import compilers.codeParts.math.ComplexOperation;
-import compilers.codeParts.loops.ComplexForCycle;
 import compilers.codeParts.math.Set;
+import compilers.codeParts.methods.Method;
+import compilers.codeParts.methods.ReturnValueFromMethod;
+import compilers.codeParts.methods.RunMethod;
 import compilers.mathEngine.MathData;
 import compilers.mathEngine.MathematicalExpressionReader;
 
@@ -13,21 +11,52 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static compilers.Settings.methodReturnVarNameString;
+
 public class Main {
     public static void main(String[] args) {
         UncompiledCode code;
         code = new UncompiledCode(
-                new ArrayList<>(),
                 new ArrayList<>(Arrays.asList(
-                        new Set("c", "10"),
-                        new IfCycle(
-                                MathematicalExpressionReader.readBracketsExpression("c <= 11", new MathData()),
-                                new ArrayList<>(List.of(MathematicalExpressionReader.readBracketsExpression("c += 1", new MathData())))
+                        new Method(
+                                "myAwesomeMethod",
+                                List.of("arg1", "arg2"),
+                                List.of(
+                                        MathematicalExpressionReader.readBracketsExpression("c = arg1 + arg2", new MathData()),
+                                        new RunMethod(
+                                                "myAnotherMethod",
+                                                List.of()
+                                        ),
+                                        new Set("h", methodReturnVarNameString + 1),
+                                        new ReturnValueFromMethod(
+                                                MathematicalExpressionReader.readBracketsExpression("c + h", new MathData()),
+                                                "myAwesomeMethod"
+                                        )
+                                )
                         ),
-                        new Set("c", "10")
+                        new Method(
+                                "myAnotherMethod",
+                                List.of(),
+                                List.of(
+                                        new ReturnValueFromMethod(
+                                                MathematicalExpressionReader.readBracketsExpression("40", new MathData()),
+                                                "myAnotherMethod"
+                                        )
+                                )
+                        )
+                )),
+                new ArrayList<>(Arrays.asList(
+                        new Set("a", "10"),
+                        new RunMethod(
+                                "myAwesomeMethod",
+                                List.of(
+                                        MathematicalExpressionReader.readBracketsExpression("a + 10", new MathData()),
+                                        MathematicalExpressionReader.readBracketsExpression("a + 20", new MathData())
+                                )
+                                ),
+                        new Set("c", methodReturnVarNameString + 0)
                 ))
         );
-        Set setCodePart = new Set("var1", "112");
-        System.out.println(Compiler.compile(code));
+        System.out.println(code.compile());
     }
 }

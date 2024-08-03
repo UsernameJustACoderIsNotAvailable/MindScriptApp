@@ -1,9 +1,7 @@
 package compilers.codeParts.inputOutput;
 
-import compilers.CompilerData;
-import compilers.codeParts.CodePart;
+import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
-import usefulMethods.PairIntString;
 
 public class Draw extends SingleLineCodePart {
     enum drawType{
@@ -95,7 +93,7 @@ public class Draw extends SingleLineCodePart {
     }//image
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
         switch (drawType){
             case clear -> {return String.format("draw clear %s %s %s", r, g, b) + "\n";}
             case color -> {return String.format("draw color %s %s %s %s", r, g, b, a) + "\n";}
@@ -111,6 +109,7 @@ public class Draw extends SingleLineCodePart {
         }
         return null;
     }
+    // TODO: 03.08.2024 пропустить тут все аргументы через функцию для префиксов
 }
 
 

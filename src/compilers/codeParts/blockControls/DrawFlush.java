@@ -1,9 +1,7 @@
 package compilers.codeParts.blockControls;
 
-import compilers.CompilerData;
-import compilers.codeParts.CodePart;
+import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
-import usefulMethods.PairIntString;
 
 public class DrawFlush extends SingleLineCodePart {
     String blockVarName;
@@ -12,7 +10,7 @@ public class DrawFlush extends SingleLineCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, CompilerData compilerData){
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
         return String.format("drawflush %s", blockVarName) + "\n";
     }
 }
