@@ -32,7 +32,7 @@ public class Method extends ComplexCodePart {
     @Override
     public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
         allCycleCodeParts.addAll(methodCode);
-        allCycleCodeParts.add(new Set("@counter", methodReturnLineString + methodIndex));
+        allCycleCodeParts.add(new Set("@counter", methodReturnLineString + methodName));
         return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, methodNameSpace, uncompiledCode);
     }
 }

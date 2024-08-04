@@ -1,29 +1,31 @@
 package compilers.codeParts;
 
 import compilers.UncompiledCode;
+import compilers.codeParts.methods.Method;
 
-import java.util.List;
+import java.util.Objects;
 
 import static compilers.Settings.*;
 
 public interface NameSpacesMethods {
     public static String getVarNameWithPrefix(String varName, int nameSpaceIndex, UncompiledCode uncompiledCode){
         varName = varName.replace(" ", "");
-        if(isVarName(varName, uncompiledCode)){
+        if(isNotGlobalVarName(varName, uncompiledCode)){
             return nameSpacePrefix + nameSpaceIndex + varName;
         }
         else {
             return varName;
         }
     }
-    public static boolean isVarName(String name, UncompiledCode uncompiledCode){
+    public static boolean isNotGlobalVarName(String name, UncompiledCode uncompiledCode){
         name = name.replace(" ", "");
         return !isLinkedBlockName(name) &&
                 !isNumeric(name) &&
                 !uncompiledCode.globalVars.contains(name) &&
                 !isSystemWord(name) &&
                 !mindustrySystemWords.contains(name) &&
-                !hasPrefix(name);
+                !hasPrefix(name) &&
+                !isMethodWord(name, uncompiledCode);
     }
     public static boolean isLinkedBlockName(String name){
         name = name.replace(" ", "");
@@ -66,6 +68,14 @@ public interface NameSpacesMethods {
             word.append(name.charAt(i));
         }
         return systemWords.contains(word.toString());
+    }
+    public static boolean isMethodWord(String name, UncompiledCode uncompiledCode){
+        for(String methodWord: methodWords){
+            for(Method method: uncompiledCode.methods){
+                if(Objects.equals(name, methodWord + method.methodName)){return true;}
+            }
+        }
+        return false;
     }
     public static boolean hasPrefix(String name){
         if(name.length() <= nameSpacePrefix.length()){return false;}

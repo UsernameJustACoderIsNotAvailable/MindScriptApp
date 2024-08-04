@@ -8,7 +8,7 @@ import compilers.codeParts.otherLogics.Jump;
 import java.util.*;
 
 public class UncompiledCode {
-    List<Method> methods = new ArrayList<Method>();
+    public List<Method> methods = new ArrayList<Method>();
     List<CodePart> codeParts = new ArrayList<CodePart>();
 
     //other data

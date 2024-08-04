@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ComplexOperation extends CodePart {
-    public List<Operation> insideOperations = new ArrayList<Operation>();
+    public List<CodePart> insideOperations = new ArrayList<CodePart>();
     public String finalVarName;
     public int helpVarLastIndexPlusOne;
 
-    public ComplexOperation(List<Operation> insideOperations, String finalVarName, int helpVarLastIndex){
+    public ComplexOperation(List<CodePart> insideOperations, String finalVarName, int helpVarLastIndex){
         this.insideOperations = insideOperations;
         this.finalVarName = finalVarName;
         this.helpVarLastIndexPlusOne = helpVarLastIndex;
@@ -27,7 +27,7 @@ public class ComplexOperation extends CodePart {
             return;
         }
         if(this.helpVarLastIndexPlusOne >= complexOperation.helpVarLastIndexPlusOne){
-            List<Operation> newInsideOperations = new ArrayList<>(complexOperation.insideOperations);
+            List<CodePart> newInsideOperations = new ArrayList<>(complexOperation.insideOperations);
             newInsideOperations.addAll(insideOperations);
             insideOperations = newInsideOperations;
         }

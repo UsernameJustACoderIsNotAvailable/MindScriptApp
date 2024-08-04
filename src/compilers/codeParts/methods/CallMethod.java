@@ -1,7 +1,6 @@
 package compilers.codeParts.methods;
 
 import compilers.UncompiledCode;
-import compilers.codeParts.CodePart;
 import compilers.codeParts.ComplexCodePart;
 import compilers.codeParts.math.ComplexOperation;
 import compilers.codeParts.math.Operation;
@@ -13,11 +12,12 @@ import static compilers.Settings.methodReturnLineString;
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 import static compilers.codeParts.math.Operation.operatorType;
 
-public class RunMethod  extends ComplexCodePart {
-    String returnVar, methodName;
+public class CallMethod extends ComplexCodePart {
+    String returnVar;
+    public String methodName;
     int methodIndex;
     List<ComplexOperation> ComplexOperationInArgs;
-    public RunMethod(String methodName, List<ComplexOperation> ComplexOperationInArgs) {
+    public CallMethod(String methodName, List<ComplexOperation> ComplexOperationInArgs) {
         this.methodName = methodName;
         this.ComplexOperationInArgs = ComplexOperationInArgs;
         for(ComplexOperation complexOperation: ComplexOperationInArgs){
@@ -33,13 +33,13 @@ public class RunMethod  extends ComplexCodePart {
         if(ComplexOperationInArgs.size() != methodToCall.args.size()){
             System.out.println(methodToCall.args.size() + " needed, provided " + ComplexOperationInArgs.size() + " for method, Named: " + methodName);
         }
+        allCycleCodeParts.addAll(ComplexOperationInArgs);
         for(int i = 0; i < ComplexOperationInArgs.size(); i++){
             ComplexOperation complexOperation = ComplexOperationInArgs.get(i);
-            allCycleCodeParts.add(complexOperation);
             allCycleCodeParts.add(new Set(getVarNameWithPrefix(methodToCall.args.get(i), methodToCall.methodNameSpace, uncompiledCode), complexOperation.finalVarName));
         }
         allCycleCodeParts.add(new Operation(
-                methodReturnLineString + methodToCall.methodIndex,
+                methodReturnLineString + methodName,
                 "@counter",
                 operatorType.add,
                 "1"

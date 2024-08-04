@@ -5,8 +5,8 @@ import java.util.List;
 
 public record Settings() {
     public static final String nameSpacePrefix = "ns";
-    public static final String methodReturnLineString = "methodReturnLine";
-    public static final String methodReturnVarNameString = "methodReturnVarName";
+    public static final String methodReturnLineString = "MRL";
+    public static final String methodReturnVarNameString = "MRV";
     public static final String helpVarString = "help";
     public static final List<String> blockNames = List.of(
             "smelter", "crucible", "kiln", "press", "compressor", "press", "weaver",
@@ -29,6 +29,9 @@ public record Settings() {
             "@mapw", "@maph", "@links", "@ipt", "@thisx", "@thisy", "true", "false"
             );
     public static final List<String> systemWords = List.of(
-            methodReturnLineString, methodReturnVarNameString, helpVarString
-    );
+            helpVarString
+    );//system words ends with index
+    public static final List<String> methodWords = List.of(
+            methodReturnLineString, methodReturnVarNameString
+    );//methods words ends with method name
 }

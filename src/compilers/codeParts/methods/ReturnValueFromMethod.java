@@ -23,8 +23,8 @@ public class ReturnValueFromMethod extends ComplexCodePart {
     public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
         int methodIndex = uncompiledCode.getMethodByName(methodName).methodIndex;
         allCycleCodeParts.add(valueToReturn);
-        allCycleCodeParts.add(new Set(methodReturnVarNameString + methodIndex, getVarNameWithPrefix(valueToReturn.finalVarName, nameSpaceIndex, uncompiledCode)));
-        allCycleCodeParts.add(new Set("@counter", methodReturnLineString + methodIndex));
+        allCycleCodeParts.add(new Set(methodReturnVarNameString + methodName, getVarNameWithPrefix(valueToReturn.finalVarName, nameSpaceIndex, uncompiledCode)));
+        allCycleCodeParts.add(new Set("@counter", methodReturnLineString + methodName));
         return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode);
     }
 }

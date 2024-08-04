@@ -57,7 +57,7 @@ public class MathData {
             { "%=", new MathUnit("%=", operatorType.mod, operatorArgAmount.binary, operationIsAssignment.assignment, 6) },
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (MathUnit) data[1]));
     //operators от нуля до n - максимальный приоритет до минимального
-    public String wordsAndValuesChars = "qwertyuiopasdfghjklzxcvbnm_1234567890йцукенгшщзхъфывапролджэячсмитьбю";
+    public String wordsAndValuesChars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_1234567890йцукенгшщзхъфывапролджэячсмитьбюёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁ";
     public int operationsPrioritiesCount;
 
     public MathData(){
