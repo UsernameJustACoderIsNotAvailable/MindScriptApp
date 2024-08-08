@@ -11,8 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static compilers.Settings.methodReturnVarNameString;
-import static compilers.mathEngine.MathematicalExpressionReader.findMethodsInExpression;
-import static compilers.mathEngine.MathematicalExpressionReader.getCallMethodCodePartFromString;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,7 +29,7 @@ public class Main {
                         )
                 )),
                 new ArrayList<>(Arrays.asList(
-                        MathematicalExpressionReader.readExpression("x = myAwesomeMethod(90, myAwesomeMethod(9, 1))", new MathData())
+                        MathematicalExpressionReader.readExpression("x = myAwesomeMethod(90 + 90, myAwesomeMethod(9, 1)) + myAwesomeMethod(1, 2)", new MathData())
                 ))
         );
         System.out.println(code.compile());

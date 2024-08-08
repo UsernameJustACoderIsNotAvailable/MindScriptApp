@@ -8,6 +8,7 @@ public record Settings() {
     public static final String methodReturnLineString = "MRL";
     public static final String methodReturnVarNameString = "MRV";
     public static final String helpVarString = "help";
+    public static final String multipurposeMethodReturnVarNameString = "returnedVar";
     public static final List<String> blockNames = List.of(
             "smelter", "crucible", "kiln", "press", "compressor", "press", "weaver",
             "smelter", "mixer", "mixer", "mixer", "melter", "separator", "disassembler", "press", "pulverizer",
@@ -29,7 +30,7 @@ public record Settings() {
             "@mapw", "@maph", "@links", "@ipt", "@thisx", "@thisy", "true", "false"
             );
     public static final List<String> systemWords = List.of(
-            helpVarString
+            helpVarString, multipurposeMethodReturnVarNameString
     );//system words ends with index
     public static final List<String> methodWords = List.of(
             methodReturnLineString, methodReturnVarNameString

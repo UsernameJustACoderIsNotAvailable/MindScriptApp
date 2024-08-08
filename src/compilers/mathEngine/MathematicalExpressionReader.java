@@ -9,18 +9,19 @@ import compilers.codeParts.methods.Method;
 
 import java.util.*;
 
-import static compilers.Settings.helpVarString;
-import static compilers.Settings.methodReturnVarNameString;
+import static compilers.Settings.*;
 
-public interface MathematicalExpressionReader {
+public class MathematicalExpressionReader {
+    public static int nextExpressionIndex = 0;//потом придумать что-то, привязанное к конкретному коду
     public static ComplexOperation readExpression(String expression, MathData mathData){
         ComplexOperation finalComplexOperation = null;
         //methods
         List<CodePart> finalCodePartsList = new ArrayList<>();
-        for(String methodString: findMethodsInExpression(expression, mathData)){
-            CallMethod callMethod = getCallMethodCodePartFromString(methodString, mathData);
+        List<String> methodsNames = findMethodsInExpression(expression, mathData);
+        for(int i = 0; i < methodsNames.size(); i++){
+            CallMethod callMethod = getCallMethodCodePartFromString(methodsNames.get(i), i, mathData);
             finalCodePartsList.add(callMethod);
-            expression = expression.replace(methodString, methodReturnVarNameString + callMethod.methodName);
+            expression = expression.replace(methodsNames.get(i), multipurposeMethodReturnVarNameString + i);
         }
         //brackets expression
         ComplexOperation braketsExpressionComplexOperation = readBracketsExpression(expression, mathData);
@@ -30,9 +31,10 @@ public interface MathematicalExpressionReader {
                 braketsExpressionComplexOperation.finalVarName,
                 braketsExpressionComplexOperation.helpVarLastIndexPlusOne
                 );
+        nextExpressionIndex++;
         return finalComplexOperation;
     }
-    public static List<String> findMethodsInExpression(String expression, MathData mathData){
+    private static List<String> findMethodsInExpression(String expression, MathData mathData){
         List<String> methods =  new ArrayList<>();
         StringBuilder word = new StringBuilder();//потенциально имя метода
         boolean lastElementIsWord = mathData.wordsAndValuesChars.contains(String.valueOf(expression.charAt(0)));
@@ -76,7 +78,7 @@ public interface MathematicalExpressionReader {
         }
         return methods;
     }
-    static CallMethod getCallMethodCodePartFromString(String callMethodString, MathData mathData){
+    private static CallMethod getCallMethodCodePartFromString(String callMethodString, int methodIndex, MathData mathData){
         //method name
         StringBuilder methodNameStringBuilder = new StringBuilder();
         int i = 0;
@@ -142,7 +144,7 @@ public interface MathematicalExpressionReader {
         for(String argString: argsListString){
             args.add(readExpression(argString, mathData));
         }
-        return new CallMethod(methodName, args);
+        return new CallMethod(methodName, multipurposeMethodReturnVarNameString + methodIndex, args);
     }
     //brackets expression
     private static ComplexOperation readBracketsExpression(String expression, MathData mathData){
@@ -216,7 +218,7 @@ public interface MathematicalExpressionReader {
                                 mathUnits.get(operationIndex + 1).type != MathUnit.mathUnitType.wordOrValue) {
                             System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
                         }
-                        resultVarName = helpVarString + helpVarCount;
+                        resultVarName = helpVarString + nextExpressionIndex + helpVarCount;
                         operations.add(new Operation(
                                 mathUnits.get(operationIndex - 1).stringValue,
                                 mathUnits.get(operationIndex + 1).stringValue,
@@ -236,7 +238,7 @@ public interface MathematicalExpressionReader {
                                 mathUnits.get(operationIndex + 1).type != MathUnit.mathUnitType.wordOrValue) {
                             System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
                         }
-                        resultVarName = helpVarString + helpVarCount;
+                        resultVarName = helpVarString + nextExpressionIndex + helpVarCount;
                         operations.add(new Operation(
                                 resultVarName,
                                 mathUnits.get(operationIndex - 1).stringValue,
@@ -258,7 +260,7 @@ public interface MathematicalExpressionReader {
                             if (mathUnits.get(operationIndex + 1).type != MathUnit.mathUnitType.wordOrValue) {
                                 System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
                             }
-                            resultVarName = helpVarString + helpVarCount;
+                            resultVarName = helpVarString + nextExpressionIndex + helpVarCount;
                             operations.add(new Operation(
                                     resultVarName,
                                     mathUnits.get(operationIndex + 1).stringValue,

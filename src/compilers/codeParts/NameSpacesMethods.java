@@ -22,7 +22,6 @@ public interface NameSpacesMethods {
         return !isLinkedBlockName(name) &&
                 !isNumeric(name) &&
                 !uncompiledCode.globalVars.contains(name) &&
-                !isSystemWord(name) &&
                 !mindustrySystemWords.contains(name) &&
                 !hasPrefix(name) &&
                 !isMethodWord(name, uncompiledCode);
