@@ -1,32 +1,38 @@
 package compilers.codeParts.operations;
 
 import compilers.UncompiledCode;
+import compilers.codeParts.ComplexCodePart;
 import compilers.codeParts.SingleLineCodePart;
+import compilers.mathEngine.MathData;
 
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
+import static compilers.mathEngine.MathematicalExpressionReader.readExpression;
 
-public class PackColor extends SingleLineCodePart {
+public class PackColor extends ComplexCodePart {
     String resultVarName;
-    String arg1;
-    String arg2;
-    String arg3;
-    String arg4;
+    ComplexOperation r, g, b, a;// 0 - 1 float
 
-    public PackColor(String resultVarName, String arg1, String arg2, String arg3, String arg4){
+    public PackColor(String resultVarName, String rExpression, String gExpression, String bExpression, String aExpression, MathData mathData){
         this.resultVarName = resultVarName;
-        this.arg1 = arg1;
-        this.arg2 = arg2;
-        this.arg3 = arg3;
-        this.arg4 = arg4;
+        r = readExpression(rExpression, mathData);
+        g = readExpression(gExpression, mathData);
+        b = readExpression(bExpression, mathData);
+        a = readExpression(aExpression, mathData);
+        linesCount = 1 + r.linesCount + g.linesCount + b.linesCount + a.linesCount;
     }
 
     public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
-        return String.format("packcolor %s %s %s %s",
-                getVarNameWithPrefix(arg1, nameSpaceIndex, uncompiledCode),
-                getVarNameWithPrefix(arg2, nameSpaceIndex, uncompiledCode),
-                getVarNameWithPrefix(arg3, nameSpaceIndex, uncompiledCode),
-                getVarNameWithPrefix(arg4, nameSpaceIndex, uncompiledCode)
-        );
+        allCycleCodeParts.add(r);
+        allCycleCodeParts.add(g);
+        allCycleCodeParts.add(b);
+        allCycleCodeParts.add(a);
+        return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                String.format("packcolor %s %s %s %s",
+                        getVarNameWithPrefix(r.finalVarName, nameSpaceIndex, uncompiledCode),
+                        getVarNameWithPrefix(g.finalVarName, nameSpaceIndex, uncompiledCode),
+                        getVarNameWithPrefix(b.finalVarName, nameSpaceIndex, uncompiledCode),
+                        getVarNameWithPrefix(a.finalVarName, nameSpaceIndex, uncompiledCode)
+                ) + "\n";
     }
 }
 

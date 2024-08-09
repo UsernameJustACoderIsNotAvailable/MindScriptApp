@@ -1,11 +1,15 @@
 package compilers.codeParts.inputOutput;
 
 import compilers.UncompiledCode;
+import compilers.codeParts.ComplexCodePart;
 import compilers.codeParts.SingleLineCodePart;
+import compilers.codeParts.operations.ComplexOperation;
+import compilers.mathEngine.MathData;
 
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
+import static compilers.mathEngine.MathematicalExpressionReader.readExpression;
 
-public class Draw extends SingleLineCodePart {
+public class Draw extends ComplexCodePart {
     enum drawType{
         clear,
         color,
@@ -21,139 +25,198 @@ public class Draw extends SingleLineCodePart {
     }
 
     drawType drawType;
-    String r, g, b, a;
+    ComplexOperation r, g, b, a;
     String color;
-    String stroke; //ширина линии
-    String x, y, x2, y2, x3, y3;
-    String width, height;
-    String sides;
-    String radius, rotation;
+    ComplexOperation stroke; //ширина линии
+    ComplexOperation x, y, x2, y2, x3, y3;
+    ComplexOperation width, height;
+    ComplexOperation sides;
+    ComplexOperation radius, rotation;
     String image;
-    String size;
+    ComplexOperation size;
 
-    Draw(String arg, drawType drawType){
+    Draw(String arg, drawType drawType, MathData mathData){
         this.drawType = drawType;
+        this.color = arg;
         switch (drawType){
             case col -> {
                 this.color = arg;
+                linesCount = 1;
             }
             case stroke -> {
-                this.stroke = arg;
+                this.stroke = readExpression(arg, mathData);
+                linesCount = 1 + stroke.linesCount;
             }
         }
     }//col, stroke
-    Draw(String r, String g, String b, drawType drawType) {
+
+    Draw(String rExpression, String gExpression, String bExpression, drawType drawType, MathData mathData) {
         this.drawType = drawType;
-        this.r = r;
-        this.g = g;
-        this.b = b;
+        r = readExpression(rExpression, mathData);
+        g = readExpression(gExpression, mathData);
+        b = readExpression(bExpression, mathData);
+        linesCount = 1 + r.linesCount + g.linesCount + b.linesCount;
     }//clear
-    Draw(String arg1, String arg2, String arg3, String arg4, drawType drawType){
+    Draw(String arg1, String arg2, String arg3, String arg4, drawType drawType, MathData mathData){
         this.drawType = drawType;
         switch (drawType){
             case color -> {
-                this.r = arg1;
-                this.g = arg2;
-                this.b = arg3;
-                this.a = arg4;
+                r = readExpression(arg1, mathData);
+                g = readExpression(arg2, mathData);
+                b = readExpression(arg3, mathData);
+                a = readExpression(arg4, mathData);
+                linesCount = 1 + r.linesCount + g.linesCount + b.linesCount + a.linesCount;
             }
             case line -> {
-                this.x = arg1;
-                this.y = arg2;
-                this.x2 = arg3;
-                this.y2 = arg4;
+                x = readExpression(arg1, mathData);
+                y = readExpression(arg2, mathData);
+                x2 = readExpression(arg3, mathData);
+                y2 = readExpression(arg4, mathData);
+                linesCount = 1 + x.linesCount + y.linesCount + x2.linesCount + y2.linesCount;
             }
             case rect, lineRect -> {
-                this.x = arg1;
-                this.y = arg2;
-                this.width = arg3;
-                this.height = arg4;
+                x = readExpression(arg1, mathData);
+                y = readExpression(arg2, mathData);
+                width = readExpression(arg3, mathData);
+                height = readExpression(arg4, mathData);
+                linesCount = 1 + x.linesCount + y.linesCount + width.linesCount + height.linesCount;
             }
         }
     }//color, line, rect, lineRect
-    Draw(String arg1, String arg2, String arg3, String arg4, String arg5, drawType drawType){
+    Draw(String arg1, String arg2, String arg3, String arg4, String arg5, drawType drawType, MathData mathData){
         this.drawType = drawType;
         switch (drawType){
             case poly, linePoly -> {
-                this.x = arg1;
-                this.y = arg2;
-                this.sides = arg3;
-                this.radius = arg4;
-                this.rotation = arg5;
+                x = readExpression(arg1, mathData);
+                y = readExpression(arg2, mathData);
+                sides = readExpression(arg3, mathData);
+                radius = readExpression(arg4, mathData);
+                rotation = readExpression(arg5, mathData);
+                linesCount = 1 + x.linesCount + y.linesCount + sides.linesCount + radius.linesCount + rotation.linesCount;
             }
             case image -> {
-                this.x = arg1;
-                this.y = arg2;
+                x = readExpression(arg1, mathData);
+                y = readExpression(arg2, mathData);
                 this.image = arg3;
-                this.sides = arg4;
-                this.rotation = arg5;
+                sides = readExpression(arg3, mathData);
+                rotation = readExpression(arg5, mathData);
+                linesCount = 1 + x.linesCount + y.linesCount + sides.linesCount + rotation.linesCount;
             }
         }
     }//poly, linePoly, image
-    Draw(String x, String y, String x2, String y2, String x3, String y3, drawType drawType){
+    Draw(String xExpression, String yExpression, String x2Expression, String y2Expression, String x3Expression, String y3Expression, drawType drawType, MathData mathData){
         this.drawType = drawType;
-        this.x = x;
-        this.y = y;
-        this.x2 = x2;
-        this.y2 = y2;
-        this.x3 = x3;
-        this.y3 = y3;
+        x = readExpression(xExpression, mathData);
+        y = readExpression(yExpression, mathData);
+        x2 = readExpression(x2Expression, mathData);
+        y2 = readExpression(y2Expression, mathData);
+        x3 = readExpression(x3Expression, mathData);
+        y3 = readExpression(y3Expression, mathData);
     }//triangle
 
     @Override
     public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
         switch (drawType){
-            case clear -> {return String.format("draw clear %s %s %s",
-                    getVarNameWithPrefix(r, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(g, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(b, nameSpaceIndex, uncompiledCode)
-            ) + "\n";}
-            case color -> {return String.format("draw color %s %s %s %s",
-                    getVarNameWithPrefix(r, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(g, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(b, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(a, nameSpaceIndex, uncompiledCode)
-                    ) + "\n";}
+            case clear -> {
+                allCycleCodeParts.add(r);
+                allCycleCodeParts.add(g);
+                allCycleCodeParts.add(b);
+                return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                        String.format("draw clear %s %s %s",
+                                getVarNameWithPrefix(r.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(g.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(b.finalVarName, nameSpaceIndex, uncompiledCode)
+                        ) + "\n";}
+            case color -> {
+                allCycleCodeParts.add(r);
+                allCycleCodeParts.add(g);
+                allCycleCodeParts.add(b);
+                allCycleCodeParts.add(a);
+                return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                        String.format("draw color %s %s %s %s",
+                                getVarNameWithPrefix(r.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(g.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(b.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(a.finalVarName, nameSpaceIndex, uncompiledCode)
+                        ) + "\n";}
             case col -> {return String.format("draw col %s",
                     getVarNameWithPrefix(color, nameSpaceIndex, uncompiledCode)
             ) + "\n";}
-            case stroke -> {return String.format("draw stroke %s",
-                    getVarNameWithPrefix(stroke, nameSpaceIndex, uncompiledCode)
-            ) + "\n";}
-            case line -> {return String.format("draw line %s %s %s %s",
-                    getVarNameWithPrefix(x, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(y, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(x2, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(y2, nameSpaceIndex, uncompiledCode)
-            ) + "\n";}
-            case rect, lineRect -> {return String.format("draw rect %s %s %s %s",
-                    getVarNameWithPrefix(x, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(y, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(width, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(height, nameSpaceIndex, uncompiledCode)
-            ) + "\n";}
-            case poly, linePoly -> {return String.format("draw linePoly %s %s %s %s, %s",
-                    getVarNameWithPrefix(x, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(y, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(sides, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(radius, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(rotation, nameSpaceIndex, uncompiledCode)
-            ) + "\n";}
-            case triangle -> {return String.format("draw triangle %s %s %s %s, %s, %s",
-                    getVarNameWithPrefix(x, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(y, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(x2, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(y2, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(x3, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(y3, nameSpaceIndex, uncompiledCode)
-            ) + "\n";}
-            case image -> {return String.format("draw poly %s %s %s %s, %s",
-                    getVarNameWithPrefix(x, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(y, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(image, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(sides, nameSpaceIndex, uncompiledCode),
-                    getVarNameWithPrefix(rotation, nameSpaceIndex, uncompiledCode)
-            ) + "\n";}
+            case stroke -> {
+                allCycleCodeParts.add(stroke);
+                return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                        String.format("draw stroke %s",
+                                getVarNameWithPrefix(stroke.finalVarName, nameSpaceIndex, uncompiledCode)
+                        ) + "\n";}
+            case line -> {
+                allCycleCodeParts.add(x);
+                allCycleCodeParts.add(y);
+                allCycleCodeParts.add(x2);
+                allCycleCodeParts.add(y2);
+                return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                        String.format("draw line %s %s %s %s",
+                                getVarNameWithPrefix(x.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(y.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(x2.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(y2.finalVarName, nameSpaceIndex, uncompiledCode)
+                        ) + "\n";}
+            case rect, lineRect -> {
+                allCycleCodeParts.add(x);
+                allCycleCodeParts.add(y);
+                allCycleCodeParts.add(width);
+                allCycleCodeParts.add(height);
+                return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                        String.format("draw %s %s %s %s %s",
+                                drawType,
+                                getVarNameWithPrefix(x.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(y.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(width.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(height.finalVarName, nameSpaceIndex, uncompiledCode)
+                        ) + "\n";}
+            case poly, linePoly -> {
+                allCycleCodeParts.add(x);
+                allCycleCodeParts.add(y);
+                allCycleCodeParts.add(sides);
+                allCycleCodeParts.add(radius);
+                allCycleCodeParts.add(rotation);
+                return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                        String.format("draw %s %s %s %s %s",
+                                drawType,
+                                getVarNameWithPrefix(x.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(y.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(sides.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(radius.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(rotation.finalVarName, nameSpaceIndex, uncompiledCode)
+                        ) + "\n";}
+            case triangle -> {
+                allCycleCodeParts.add(x);
+                allCycleCodeParts.add(y);
+                allCycleCodeParts.add(x2);
+                allCycleCodeParts.add(y2);
+                allCycleCodeParts.add(x3);
+                allCycleCodeParts.add(y3);
+                return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                        String.format("draw triangle %s %s %s %s %s %s",
+                                getVarNameWithPrefix(x.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(y.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(x2.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(y2.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(x3.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(y3.finalVarName, nameSpaceIndex, uncompiledCode)
+                        ) + "\n";}
+            case image -> {
+                allCycleCodeParts.add(x);
+                allCycleCodeParts.add(y);
+                allCycleCodeParts.add(sides);
+                allCycleCodeParts.add(rotation);
+                return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                        String.format("image %s %s %s %s %s",
+                                getVarNameWithPrefix(x.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(y.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(image, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(sides.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(rotation.finalVarName, nameSpaceIndex, uncompiledCode)
+                        ) + "\n";}
         }
         return null;
     }

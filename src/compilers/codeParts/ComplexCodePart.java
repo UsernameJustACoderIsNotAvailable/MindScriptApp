@@ -4,6 +4,7 @@ import compilers.UncompiledCode;
 
 import java.util.ArrayList;
 import java.util.List;
+import static compilers.mathEngine.MathematicalExpressionReader.readExpression;
 
 public abstract class ComplexCodePart extends CodePart{
     protected List<CodePart> allCycleCodeParts = new ArrayList<CodePart>();

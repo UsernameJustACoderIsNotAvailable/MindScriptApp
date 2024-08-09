@@ -1,11 +1,15 @@
 package compilers.codeParts.unitControls;
 
 import compilers.UncompiledCode;
+import compilers.codeParts.ComplexCodePart;
 import compilers.codeParts.SingleLineCodePart;
+import compilers.codeParts.operations.ComplexOperation;
+import compilers.mathEngine.MathData;
 
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
+import static compilers.mathEngine.MathematicalExpressionReader.readExpression;
 
-public class Radar extends SingleLineCodePart {
+public class Radar extends ComplexCodePart {
     enum FilterType {
         any,
         ally,
@@ -29,46 +33,50 @@ public class Radar extends SingleLineCodePart {
 
     SortType sortType;
     String blockVarName;
-    String sortMode; // 1 - normal / 0 - reverse
+    ComplexOperation sortMode; // 1 - normal / 0 - reverse
     String returnVarName;
-
-    Radar(FilterType filter1, SortType sortType, String blockVarName, String sortMode, String returnVarName)
+    Radar(FilterType filter1, SortType sortType, String blockVarName, String sortModeExpression, String returnVarName, MathData mathData)
     {
         this.filter1 = filter1;
         this.sortType = sortType;
         this.blockVarName = blockVarName;
-        this.sortMode = sortMode;
+        sortMode = readExpression(sortModeExpression, mathData);
         this.returnVarName = returnVarName;
+        linesCount = 1 + sortMode.linesCount;
     }
-    Radar(FilterType filter1, FilterType filter2, SortType sortType, String blockVarName, String sortMode, String returnVarName)
+    Radar(FilterType filter1, FilterType filter2, SortType sortType, String blockVarName, String sortModeExpression, String returnVarName, MathData mathData)
     {
         this.filter1 = filter1;
         this.filter1 = filter2;
         this.sortType = sortType;
         this.blockVarName = blockVarName;
-        this.sortMode = sortMode;
+        sortMode = readExpression(sortModeExpression, mathData);
         this.returnVarName = returnVarName;
+        linesCount = 1 + sortMode.linesCount;
     }
-    Radar(FilterType filter1, FilterType filter2, FilterType filter3, SortType sortType, String blockVarName, String sortMode, String returnVarName)
+    Radar(FilterType filter1, FilterType filter2, FilterType filter3, SortType sortType, String blockVarName, String sortModeExpression, String returnVarName, MathData mathData)
     {
         this.filter1 = filter1;
         this.filter1 = filter2;
         this.filter1 = filter3;
         this.sortType = sortType;
         this.blockVarName = blockVarName;
-        this.sortMode = sortMode;
+        sortMode = readExpression(sortModeExpression, mathData);
         this.returnVarName = returnVarName;
+        linesCount = 1 + sortMode.linesCount;
     }
 
     @Override
     public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
-        return String.format("uradar %s %s %s %s 0 %s %s\n",
-                filter1.name(),
-                filter2.name(),
-                filter3.name(),
-                sortType.name(),
-                sortMode,
-                getVarNameWithPrefix(returnVarName, nameSpaceIndex, uncompiledCode)
-        ) + "\n";
+        allCycleCodeParts.add(sortMode);
+        return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                String.format("uradar %s %s %s %s 0 %s %s",
+                        filter1,
+                        filter2,
+                        filter3,
+                        sortType,
+                        getVarNameWithPrefix(sortMode.finalVarName, nameSpaceIndex, uncompiledCode),
+                        getVarNameWithPrefix(returnVarName, nameSpaceIndex, uncompiledCode)
+                ) + "\n";
     }
 }

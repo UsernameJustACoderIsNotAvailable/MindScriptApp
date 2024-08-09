@@ -137,12 +137,7 @@ public class MathematicalExpressionReader {
             }
         }
         if(!arg.isEmpty()){argsListString.add(arg.toString());}
-        //convert into ComplexOperation list
-        List<ComplexOperation> args = new ArrayList<>();
-        for(String argString: argsListString){
-            args.add(readExpression(argString, mathData));
-        }
-        return new CallMethod(methodName, multipurposeMethodReturnVarNameString + methodIndex, args);
+        return new CallMethod(methodName, multipurposeMethodReturnVarNameString + methodIndex, argsListString, mathData);
     }
     //brackets expression
     private static ComplexOperation readBracketsExpression(String expression, MathData mathData){

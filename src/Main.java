@@ -1,4 +1,5 @@
 import compilers.UncompiledCode;
+import compilers.codeParts.blockControls.GetLink;
 import compilers.codeParts.methods.Method;
 import compilers.codeParts.methods.ReturnValueFromMethod;
 import compilers.mathEngine.MathData;
@@ -18,15 +19,17 @@ public class Main {
                                 List.of("arg1", "arg2"),
                                 List.of(
                                         new ReturnValueFromMethod(
-                                                MathematicalExpressionReader.readExpression("arg1 + arg2", new MathData()),
-                                                "myAwesomeMethod"
+                                                "arg1 + arg2",
+                                                "myAwesomeMethod",
+                                                new MathData()
                                         )
                                 )
                         )
                 )),
                 new ArrayList<>(Arrays.asList(
-                        MathematicalExpressionReader.readExpression("x = myAwesomeMethod(90 + 90, myAwesomeMethod(9, 1)) + myAwesomeMethod(1, 2)", new MathData())
-                ))
+                        MathematicalExpressionReader.readExpression("x = myAwesomeMethod(90 + 90, myAwesomeMethod(9, 1) + myAwesomeMethod(1, 2)) - myAwesomeMethod(1, 2)", new MathData())
+                )),
+                new MathData()
         );
         System.out.println(code.compile());
     }

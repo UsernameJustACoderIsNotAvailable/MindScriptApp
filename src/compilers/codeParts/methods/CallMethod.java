@@ -5,24 +5,29 @@ import compilers.codeParts.ComplexCodePart;
 import compilers.codeParts.operations.ComplexOperation;
 import compilers.codeParts.operations.Operation;
 import compilers.codeParts.operations.Set;
+import compilers.mathEngine.MathData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static compilers.Settings.methodReturnLineString;
 import static compilers.Settings.methodReturnVarNameString;
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 import static compilers.codeParts.operations.Operation.operatorType;
+import static compilers.mathEngine.MathematicalExpressionReader.readExpression;
 
 public class CallMethod extends ComplexCodePart {
     String returnVarName;
     public String methodName;
     int methodIndex;
-    List<ComplexOperation> ComplexOperationInArgs;
+    List<ComplexOperation> ComplexOperationInArgs = new ArrayList<>();
     boolean returnsSomething;
-    public CallMethod(String methodName, String returnVarName, List<ComplexOperation> ComplexOperationInArgs) {
+    public CallMethod(String methodName, String returnVarName, List<String> ComplexOperationInArgsExpressions, MathData mathData) {
         returnsSomething = true;
         this.methodName = methodName;
-        this.ComplexOperationInArgs = ComplexOperationInArgs;
+        for(String expression: ComplexOperationInArgsExpressions){
+            ComplexOperationInArgs.add(readExpression(expression, mathData));
+        }
         this.returnVarName = returnVarName;
         for(ComplexOperation complexOperation: ComplexOperationInArgs){
             linesCount += complexOperation.linesCount;
@@ -30,10 +35,12 @@ public class CallMethod extends ComplexCodePart {
         }
         linesCount += 3; // еще 2 строчки для вызова метода и 1 для смены имени итоговой переменной на returnVarName
     }
-    public CallMethod(String methodName, List<ComplexOperation> ComplexOperationInArgs) {
+    public CallMethod(String methodName, List<String> ComplexOperationInArgsExpressions, MathData mathData) {
         returnsSomething = false;
         this.methodName = methodName;
-        this.ComplexOperationInArgs = ComplexOperationInArgs;
+        for(String expression: ComplexOperationInArgsExpressions){
+            ComplexOperationInArgs.add(readExpression(expression, mathData));
+        }
         for(ComplexOperation complexOperation: ComplexOperationInArgs){
             linesCount += complexOperation.linesCount;
             linesCount += 1; // строчка чтобы приравнять аргумент к итоговому значению

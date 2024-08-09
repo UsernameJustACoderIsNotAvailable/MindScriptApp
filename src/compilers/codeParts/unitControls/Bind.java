@@ -3,6 +3,8 @@ package compilers.codeParts.unitControls;
 import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
 
+import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
+
 public class Bind extends SingleLineCodePart {
     String bindType;
     Bind(String bindType){
@@ -11,6 +13,6 @@ public class Bind extends SingleLineCodePart {
 
     @Override
     public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
-        return String.format("bind %s", bindType) + "\n";
+        return String.format("bind %s", getVarNameWithPrefix(bindType, nameSpaceIndex, uncompiledCode)) + "\n";
     }
 }

@@ -4,17 +4,20 @@ import compilers.codeParts.CodePart;
 import compilers.codeParts.methods.Method;
 import compilers.codeParts.otherLogics.End;
 import compilers.codeParts.otherLogics.Jump;
+import compilers.mathEngine.MathData;
 
 import java.util.*;
 
 public class UncompiledCode {
     public List<Method> methods = new ArrayList<Method>();
     List<CodePart> codeParts = new ArrayList<CodePart>();
+    public MathData mathData;
 
     //other data
     public List<String> globalVars = new ArrayList<String>();
 
-    public UncompiledCode(ArrayList<Method> methods, ArrayList<CodePart> codeParts){
+    public UncompiledCode(ArrayList<Method> methods, ArrayList<CodePart> codeParts, MathData mathData){
+        this.mathData = mathData;
         int CodePartsAndMethodsCurrentLine = -1;// это нужно, чтобы позже посчитать, на какую строчку нам ссылаться при вызове методов
         for(CodePart codePart: codeParts){
             CodePartsAndMethodsCurrentLine += codePart.linesCount;

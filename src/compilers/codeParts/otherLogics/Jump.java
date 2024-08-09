@@ -1,11 +1,15 @@
 package compilers.codeParts.otherLogics;
 
 import compilers.UncompiledCode;
+import compilers.codeParts.ComplexCodePart;
 import compilers.codeParts.SingleLineCodePart;
+import compilers.codeParts.operations.ComplexOperation;
+import compilers.mathEngine.MathData;
 
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
+import static compilers.mathEngine.MathematicalExpressionReader.readExpression;
 
-public class Jump extends SingleLineCodePart {
+public class Jump extends ComplexCodePart {
     public enum BoolOperationType{
         equal,
         notEqual,
@@ -18,18 +22,19 @@ public class Jump extends SingleLineCodePart {
     }
 
     BoolOperationType boolOperation;
-    String firstArg;
-    String secondArg;
+    ComplexOperation firstArg, secondArg;
     int jumpToIndex;
-    public Jump(BoolOperationType boolOperation, String firstArg, String secondArg, int jumpToIndex){
+    public Jump(BoolOperationType boolOperation, String firstArgExpression, String secondArgExpression, int jumpToIndex, MathData mathData){
         this.boolOperation = boolOperation;
-        this.firstArg = firstArg;
-        this.secondArg = secondArg;
+        firstArg = readExpression(firstArgExpression, mathData);
+        secondArg = readExpression(secondArgExpression, mathData);;
         this.jumpToIndex = jumpToIndex;
+        linesCount = 1 + firstArg.linesCount + secondArg.linesCount;
     }
     public Jump(int jumpToIndex){
         this.boolOperation = BoolOperationType.always;
         this.jumpToIndex = jumpToIndex;
+        linesCount = 1;
     }
 
     @Override
@@ -40,12 +45,15 @@ public class Jump extends SingleLineCodePart {
                         boolOperation
                 ) + "\n";}
             case equal, notEqual, lessThan, lessThanEq, greaterThan, greaterThanEq, strictEqual -> {
-                return String.format("jump %s %s %s %s",
-                        jumpToIndex,
-                        boolOperation,
-                        getVarNameWithPrefix(firstArg, nameSpaceIndex, uncompiledCode),
-                        getVarNameWithPrefix(secondArg, nameSpaceIndex, uncompiledCode)
-                ) + "\n";
+                allCycleCodeParts.add(firstArg);
+                allCycleCodeParts.add(secondArg);
+                return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
+                        String.format("jump %s %s %s %s",
+                                jumpToIndex,
+                                boolOperation,
+                                getVarNameWithPrefix(firstArg.finalVarName, nameSpaceIndex, uncompiledCode),
+                                getVarNameWithPrefix(secondArg.finalVarName, nameSpaceIndex, uncompiledCode)
+                        ) + "\n";
             }
         }
         return null;

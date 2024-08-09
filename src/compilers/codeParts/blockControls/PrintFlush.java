@@ -2,12 +2,13 @@ package compilers.codeParts.blockControls;
 
 import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
+import compilers.mathEngine.MathData;
 
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 
 public class PrintFlush  extends SingleLineCodePart {
     String blockVarName;
-    PrintFlush(String blockVarName)
+    PrintFlush(String blockVarName, MathData mathData)
     {
         this.blockVarName = blockVarName;
     }

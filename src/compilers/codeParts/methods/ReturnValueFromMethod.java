@@ -4,16 +4,18 @@ import compilers.UncompiledCode;
 import compilers.codeParts.ComplexCodePart;
 import compilers.codeParts.operations.ComplexOperation;
 import compilers.codeParts.operations.Set;
+import compilers.mathEngine.MathData;
 
 import static compilers.Settings.*;
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
+import static compilers.mathEngine.MathematicalExpressionReader.readExpression;
 
 public class ReturnValueFromMethod extends ComplexCodePart {
     ComplexOperation valueToReturn;
     String methodName;
 
-    public ReturnValueFromMethod(ComplexOperation valueToReturn, String methodName){
-        this.valueToReturn = valueToReturn;
+    public ReturnValueFromMethod(String valueToReturnExpression, String methodName, MathData mathData){
+        valueToReturn = readExpression(valueToReturnExpression, mathData);
         this.methodName = methodName;
         linesCount = 2;//т. к. в конце кода этого CodePart будет строчка Set @counter и Set methodReturnVarNameString + methodIndex
         linesCount += valueToReturn.linesCount;
