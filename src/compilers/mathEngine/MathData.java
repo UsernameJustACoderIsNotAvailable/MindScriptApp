@@ -1,9 +1,8 @@
 package compilers.mathEngine;
 
-import compilers.codeParts.math.Operation;
-import compilers.codeParts.math.Operation.operatorType;
-import compilers.codeParts.math.Operation.operatorArgAmount;
-import compilers.codeParts.math.Operation.operationIsAssignment;
+import compilers.codeParts.operations.Operation.operatorType;
+import compilers.codeParts.operations.Operation.operatorArgAmount;
+import compilers.codeParts.operations.Operation.operationIsAssignment;
 
 import java.util.List;
 import java.util.Map;

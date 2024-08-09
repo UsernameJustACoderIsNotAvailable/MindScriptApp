@@ -2,16 +2,16 @@ package compilers.codeParts.methods;
 
 import compilers.UncompiledCode;
 import compilers.codeParts.ComplexCodePart;
-import compilers.codeParts.math.ComplexOperation;
-import compilers.codeParts.math.Operation;
-import compilers.codeParts.math.Set;
+import compilers.codeParts.operations.ComplexOperation;
+import compilers.codeParts.operations.Operation;
+import compilers.codeParts.operations.Set;
 
 import java.util.List;
 
 import static compilers.Settings.methodReturnLineString;
 import static compilers.Settings.methodReturnVarNameString;
 import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
-import static compilers.codeParts.math.Operation.operatorType;
+import static compilers.codeParts.operations.Operation.operatorType;
 
 public class CallMethod extends ComplexCodePart {
     String returnVarName;
@@ -38,7 +38,7 @@ public class CallMethod extends ComplexCodePart {
             linesCount += complexOperation.linesCount;
             linesCount += 1; // строчка чтобы приравнять аргумент к итоговому значению
         }
-        linesCount += 2; // еще 2 строчки для вызова метода и 1 для смены имени итоговой переменной на returnVarName
+        linesCount += 2; // еще 2 строчки для вызова метода
     }
 
     @Override

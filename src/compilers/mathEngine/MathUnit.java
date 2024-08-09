@@ -1,6 +1,6 @@
 package compilers.mathEngine;
 
-import compilers.codeParts.math.Operation;
+import compilers.codeParts.operations.Operation;
 
 import java.util.Objects;
 

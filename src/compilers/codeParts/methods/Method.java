@@ -3,7 +3,7 @@ package compilers.codeParts.methods;
 import compilers.UncompiledCode;
 import compilers.codeParts.CodePart;
 import compilers.codeParts.ComplexCodePart;
-import compilers.codeParts.math.Set;
+import compilers.codeParts.operations.Set;
 
 import java.util.List;
 

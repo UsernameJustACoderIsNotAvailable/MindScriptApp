@@ -1,4 +1,4 @@
-package compilers.codeParts.math;
+package compilers.codeParts.operations;
 
 import compilers.UncompiledCode;
 import compilers.codeParts.CodePart;

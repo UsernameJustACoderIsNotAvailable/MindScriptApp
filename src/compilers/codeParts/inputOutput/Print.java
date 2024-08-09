@@ -3,6 +3,8 @@ package compilers.codeParts.inputOutput;
 import compilers.UncompiledCode;
 import compilers.codeParts.SingleLineCodePart;
 
+import static compilers.codeParts.NameSpacesMethods.getVarNameWithPrefix;
+
 public class Print extends SingleLineCodePart {
     String text;
     Print(String text)
@@ -12,6 +14,6 @@ public class Print extends SingleLineCodePart {
 
     @Override
     public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
-        return String.format("print %s", text) + "\n";
+        return String.format("print %s", getVarNameWithPrefix(text, nameSpaceIndex, uncompiledCode)) + "\n";
     }
 }

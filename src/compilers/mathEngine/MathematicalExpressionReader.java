@@ -1,11 +1,9 @@
 package compilers.mathEngine;
 
-import compilers.UncompiledCode;
 import compilers.codeParts.CodePart;
-import compilers.codeParts.math.ComplexOperation;
-import compilers.codeParts.math.Operation;
+import compilers.codeParts.operations.ComplexOperation;
+import compilers.codeParts.operations.Operation;
 import compilers.codeParts.methods.CallMethod;
-import compilers.codeParts.methods.Method;
 
 import java.util.*;
 

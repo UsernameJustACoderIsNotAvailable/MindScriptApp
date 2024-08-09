@@ -4,7 +4,7 @@ import java.util.List;
 
 import compilers.UncompiledCode;
 import compilers.codeParts.CodePart;
-import compilers.codeParts.math.ComplexOperation;
+import compilers.codeParts.operations.ComplexOperation;
 import compilers.codeParts.otherLogics.Jump;
 
 public class ComplexForCycle extends CycleCodePart {

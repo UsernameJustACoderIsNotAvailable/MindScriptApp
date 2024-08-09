@@ -2,7 +2,7 @@ package compilers.codeParts.loops;
 
 import compilers.UncompiledCode;
 import compilers.codeParts.CodePart;
-import compilers.codeParts.math.ComplexOperation;
+import compilers.codeParts.operations.ComplexOperation;
 import compilers.codeParts.otherLogics.Jump;
 
 import java.util.List;
