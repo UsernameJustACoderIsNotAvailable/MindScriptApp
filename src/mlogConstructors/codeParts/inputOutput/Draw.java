@@ -5,6 +5,8 @@ import mlogConstructors.codeParts.ComplexCodePart;
 import mlogConstructors.codeParts.operations.ComplexOperation;
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
+
 import static mlogConstructors.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 import static mlogConstructors.mathEngine.MathematicalExpressionReader.readExpression;
 
@@ -34,7 +36,7 @@ public class Draw extends ComplexCodePart {
     String image;
     ComplexOperation size;
 
-    public Draw(DrawType drawType, String arg, MathData mathData){
+    public Draw(DrawType drawType, String arg, MathData mathData) throws IOException {
         this.drawType = drawType;
         this.color = arg;
         switch (drawType){
@@ -49,14 +51,14 @@ public class Draw extends ComplexCodePart {
         }
     }//col, stroke
 
-    public Draw(DrawType drawType, String rExpression, String gExpression, String bExpression, MathData mathData) {
+    public Draw(DrawType drawType, String rExpression, String gExpression, String bExpression, MathData mathData) throws IOException {
         this.drawType = drawType;
         r = readExpression(rExpression, mathData);
         g = readExpression(gExpression, mathData);
         b = readExpression(bExpression, mathData);
         linesCount = 1 + r.linesCount + g.linesCount + b.linesCount;
     }//clear
-    public Draw(DrawType drawType, String arg1, String arg2, String arg3, String arg4, MathData mathData){
+    public Draw(DrawType drawType, String arg1, String arg2, String arg3, String arg4, MathData mathData) throws IOException {
         this.drawType = drawType;
         switch (drawType){
             case color -> {
@@ -82,7 +84,7 @@ public class Draw extends ComplexCodePart {
             }
         }
     }//color, line, rect, lineRect
-    public Draw(DrawType drawType, String arg1, String arg2, String arg3, String arg4, String arg5, MathData mathData){
+    public Draw(DrawType drawType, String arg1, String arg2, String arg3, String arg4, String arg5, MathData mathData) throws IOException {
         this.drawType = drawType;
         switch (drawType){
             case poly, linePoly -> {
@@ -103,7 +105,7 @@ public class Draw extends ComplexCodePart {
             }
         }
     }//poly, linePoly, image
-    public Draw(DrawType drawType, String xExpression, String yExpression, String x2Expression, String y2Expression, String x3Expression, String y3Expression, MathData mathData){
+    public Draw(DrawType drawType, String xExpression, String yExpression, String x2Expression, String y2Expression, String x3Expression, String y3Expression, MathData mathData) throws IOException {
         this.drawType = drawType;
         x = readExpression(xExpression, mathData);
         y = readExpression(yExpression, mathData);
@@ -114,7 +116,7 @@ public class Draw extends ComplexCodePart {
     }//triangle
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         switch (drawType){
             case clear -> {
                 allCycleCodeParts.add(r);

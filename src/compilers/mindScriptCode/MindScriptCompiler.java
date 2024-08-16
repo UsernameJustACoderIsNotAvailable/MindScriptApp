@@ -23,6 +23,7 @@ import mlogConstructors.codeParts.unitControls.UControl;
 import mlogConstructors.codeParts.unitControls.ULocate;
 import mlogConstructors.codeParts.unitControls.URadar;
 
+import java.io.IOException;
 import java.util.*;
 
 import static compilers.methods.MethodsReader.findMethodsInExpression;
@@ -31,7 +32,7 @@ import static compilers.mindScriptCode.MindScriptData.*;
 import static mlogConstructors.mathEngine.MathematicalExpressionReader.readExpression;
 
 public interface MindScriptCompiler {
-    public static UncompiledCode convertCodeIntoUncompiledCode(String code){
+    public static UncompiledCode convertCodeIntoUncompiledCode(String code) throws IOException {
         ArrayList<CodePart> codeParts = new ArrayList<>();
         ArrayList<Method> methods =  new ArrayList<>();
 
@@ -48,23 +49,23 @@ public interface MindScriptCompiler {
                     LineOfCode previousLine = lines.get(i - 1);
                     int spaceDelta = line.spacing - previousLine.spacing;
 
-                    //errors
+                    //exceptions
                     if (spaceDelta > 0 && !previousLine.hasInsideCode){
-                        System.out.println("error, line: " + previousLine.value + " does not require inside code");return null;
+                        throw new IOException("error, line: " + previousLine.value + " does not require inside code");
                     }
                     if (line.spacing >= spacing && line.type == LineOfCode.lineType.method){
-                        System.out.println("error, method: " + line.value + " cannot be declared inside loop, construction or other method");return null;
+                        throw new IOException("error, method: " + line.value + " cannot be declared inside loop, construction or other method");
                     }
                     if (spaceDelta > 0 && spacing != spaceDelta){
-                        System.out.println("error, any new spacing should contain " + spacing + " spaces, found " + spaceDelta);return null;
+                        throw new IOException("error, any new spacing should contain " + spacing + " spaces, found " + spaceDelta);
                     }
                     if (spaceDelta < 0 && spaceDelta % spacing != 0){
-                        System.out.println("error, spaceDelta < 0 && spaceDelta % spacing != 0");return null;
+                        throw new IOException("error, spaceDelta < 0 && spaceDelta % spacing != 0");
                     }
                 }
             }
             else if (line.spacing > 0){
-                System.out.println("first line cannot have spacing");return null;
+                throw new IOException("first line cannot have spacing");
             }
         }
         //перевод в CodePart
@@ -102,21 +103,26 @@ public interface MindScriptCompiler {
         }
         return new UncompiledCode(methods, codeParts, mathData);
     }
-
-    private static CodePart getCallBuiltInMethodCodePart(LineOfCode methodLine){
+    private static CodePart getCallBuiltInMethodCodePart(LineOfCode methodLine) throws IOException {
         MethodData methodData = getMethodDataFromString(methodLine.value);
         switch (builtInMethodsMap.get(methodLine.firstWord)){
             //input output
             case read -> {
-                if(methodData.args.size() != 3){System.out.println("error, method " + methodData.name + " gets 3 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 3){
+                    throw new IOException("error, method " + methodData.name + " gets 3 args, provided " + methodData.args.size());
+                }
                 return new Read(methodData.args.get(0), methodData.args.get(1), methodData.args.get(2), mathData);
             }
             case write -> {
-                if(methodData.args.size() != 3){System.out.println("error, method " + methodData.name + " gets 3 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 3){
+                    throw new IOException("error, method " + methodData.name + " gets 3 args, provided " + methodData.args.size());
+                }
                 return new Write(methodData.args.get(0), methodData.args.get(1), methodData.args.get(2), mathData);
             }
             case draw -> {
-                if(methodData.args.size() < 2 || methodData.args.size() > 7 || methodData.args.size() == 3){System.out.println("error, method " + methodData.name + " gets 2, 4, 5, 6, 7 args, provided " + methodData.args.size());}
+                if(methodData.args.size() < 2 || methodData.args.size() > 7 || methodData.args.size() == 3){
+                    throw new IOException("error, method " + methodData.name + " gets 2, 4, 5, 6, 7 args, provided " + methodData.args.size());
+                }
                 switch (methodData.args.size()){
                     case 2 -> {
                         return new Draw(
@@ -170,24 +176,34 @@ public interface MindScriptCompiler {
                 }
             }
             case print -> {
-                if(methodData.args.size() != 1){System.out.println("error, method " + methodData.name + " gets 1 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 1){
+                    throw new IOException("error, method " + methodData.name + " gets 1 args, provided " + methodData.args.size());
+                }
                 return new Print(methodData.args.get(0), mathData);
             }
             //block control
             case drawflush -> {
-                if(methodData.args.size() != 1){System.out.println("error, method " + methodData.name + " gets 1 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 1){
+                    throw new IOException("error, method " + methodData.name + " gets 1 args, provided " + methodData.args.size());
+                }
                 return new DrawFlush(methodData.args.get(0));
             }
             case printflush -> {
-                if(methodData.args.size() != 1){System.out.println("error, method " + methodData.name + " gets 1 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 1){
+                    throw new IOException("error, method " + methodData.name + " gets 1 args, provided " + methodData.args.size());
+                }
                 return new PrintFlush(methodData.args.get(0));
             }
             case getlink -> {
-                if(methodData.args.size() != 2){System.out.println("error, method " + methodData.name + " gets 2 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 2){
+                    throw new IOException("error, method " + methodData.name + " gets 2 args, provided " + methodData.args.size());
+                }
                 return new GetLink(methodData.args.get(0), methodData.args.get(1), mathData);
             }
             case control -> {
-                if(methodData.args.size() < 3 || methodData.args.size() > 5){System.out.println("error, method " + methodData.name + " gets 3, 4, 5 args, provided " + methodData.args.size());}
+                if(methodData.args.size() < 3 || methodData.args.size() > 5){
+                    throw new IOException("error, method " + methodData.name + " gets 3, 4, 5 args, provided " + methodData.args.size());
+                }
                 switch (methodData.args.size()) {
                     case 3 -> {
                         return new Control(
@@ -219,7 +235,9 @@ public interface MindScriptCompiler {
                 }
             }
             case radar -> {
-                if(methodData.args.size() < 5 || methodData.args.size() > 7){System.out.println("error, method " + methodData.name + " gets 5, 6, 7 args, provided " + methodData.args.size());}
+                if(methodData.args.size() < 5 || methodData.args.size() > 7){
+                    throw new IOException("error, method " + methodData.name + " gets 5, 6, 7 args, provided " + methodData.args.size());
+                }
                 switch (methodData.args.size()) {
                     case 5 -> {
                         return new Radar(
@@ -257,7 +275,9 @@ public interface MindScriptCompiler {
                 }
             }
             case sensor -> {
-                if(methodData.args.size() != 3){System.out.println("error, method " + methodData.name + " gets 3 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 3){
+                    throw new IOException("error, method " + methodData.name + " gets 3 args, provided " + methodData.args.size());
+                }
                 return new Sensor(
                         methodData.args.get(0),
                         methodData.args.get(1),
@@ -266,7 +286,9 @@ public interface MindScriptCompiler {
             }
             //operations
             case lookup -> {
-                if(methodData.args.size() != 3){System.out.println("error, method " + methodData.name + " gets 3 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 3){
+                    throw new IOException("error, method " + methodData.name + " gets 3 args, provided " + methodData.args.size());
+                }
                 return new Lookup(
                         lookupTypeTypeMap.get(methodData.args.get(0)),
                         methodData.args.get(1),
@@ -275,7 +297,9 @@ public interface MindScriptCompiler {
                 );
             }
             case packcolor -> {
-                if(methodData.args.size() != 5){System.out.println("error, method " + methodData.name + " gets 5 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 5){
+                    throw new IOException("error, method " + methodData.name + " gets 5 args, provided " + methodData.args.size());
+                }
                 return new PackColor(
                         methodData.args.get(0),
                         methodData.args.get(1),
@@ -287,25 +311,33 @@ public interface MindScriptCompiler {
             }
             //other logic
             case wait -> {
-                if(methodData.args.size() != 1){System.out.println("error, method " + methodData.name + " gets 1 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 1){
+                    throw new IOException("error, method " + methodData.name + " gets 1 arg, provided " + methodData.args.size());
+                }
                 return new Wait(
                         methodData.args.get(0),
                         mathData
                 );
             }
             case stop -> {
-                if(methodData.args.size() != 0){System.out.println("error, method " + methodData.name + " gets 0 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 0){
+                    throw new IOException("error, method " + methodData.name + " gets 0 args, provided " + methodData.args.size());
+                }
                 return new Stop();
             }
             // unit controls
             case ubind -> {
-                if(methodData.args.size() != 1){System.out.println("error, method " + methodData.name + " gets 1 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 1){
+                    throw new IOException("error, method " + methodData.name + " gets 1 args, provided " + methodData.args.size());
+                }
                 return new UBind(
                         methodData.args.get(0)
                 );
             }
             case ucontrol -> {
-                if(methodData.args.size() < 1 || methodData.args.size() > 6){System.out.println("error, method " + methodData.name + " gets 1, 2, 3, 4, 5, 6 args, provided " + methodData.args.size());}
+                if(methodData.args.size() < 1 || methodData.args.size() > 6){
+                    throw new IOException("error, method " + methodData.name + " gets 1, 2, 3, 4, 5, 6 args, provided " + methodData.args.size());
+                }
                 switch (methodData.args.size()) {
                     case 1 -> {
                         return new UControl(
@@ -360,7 +392,9 @@ public interface MindScriptCompiler {
                 }
             }
             case ulocate -> {
-                if(methodData.args.size() != 5 && methodData.args.size() != 7){System.out.println("error, method " + methodData.name + " gets 5, 7 args, provided " + methodData.args.size());}
+                if(methodData.args.size() != 5 && methodData.args.size() != 7){
+                    throw new IOException("error, method " + methodData.name + " gets 5, 7 args, provided " + methodData.args.size());
+                }
                 switch (methodData.args.size()) {
                     case 5 -> {
                         return new ULocate(
@@ -387,7 +421,9 @@ public interface MindScriptCompiler {
                 }
             }
             case uradar -> {
-                if(methodData.args.size() < 4 || methodData.args.size() > 6){System.out.println("error, method " + methodData.name + " gets 4, 5, 6 args, provided " + methodData.args.size());}
+                if(methodData.args.size() < 4 || methodData.args.size() > 6){
+                    throw new IOException("error, method " + methodData.name + " gets 4, 5, 6 args, provided " + methodData.args.size());
+                }
                 switch (methodData.args.size()) {
                     case 4 -> {
                         return new URadar(
@@ -422,13 +458,14 @@ public interface MindScriptCompiler {
                 }
             }
         }
-        System.out.println(methodLine.value + " is not BuiltInMethod");
-        return null;
+        throw new IOException(methodLine.value + " is not BuiltInMethod");
     }
-    private static Method getMethodCodePart(LineOfCode lineOfCOde, List<LineOfCode> insideCodeList){
+    private static Method getMethodCodePart(LineOfCode lineOfCOde, List<LineOfCode> insideCodeList) throws IOException {
         //method name
         List<String> methodStrings = findMethodsInExpression(lineOfCOde.value, mathData);
-        if(methodStrings.size() != 1){System.out.println("error, '" + lineOfCOde.value + "' is invalid method declare");}
+        if(methodStrings.size() != 1){
+            throw new IOException("error, '" + lineOfCOde.value + "' is invalid method declare");
+        }
         String methodString = methodStrings.get(0);
         MethodData methodData = getMethodDataFromString(methodString);
         assert methodData != null;
@@ -463,7 +500,7 @@ public interface MindScriptCompiler {
         }
         return new Method(methodData.name, methodData.args, insideCodeCodeParts);
     }
-    private static CodePart getCycleOrConstructionCodePart(LineOfCode lineOfCOde, String methodName, List<LineOfCode> insideCodeList){
+    private static CodePart getCycleOrConstructionCodePart(LineOfCode lineOfCOde, String methodName, List<LineOfCode> insideCodeList) throws IOException {
         //inside code
         List<CodePart> insideCodeCodeParts = new ArrayList<>();
         int i = 0;
@@ -495,28 +532,36 @@ public interface MindScriptCompiler {
         }
         //CycleOrConstruction name
         List<String> methodStrings = findMethodsInExpression(lineOfCOde.value, mathData);
-        if(methodStrings.size() != 1){System.out.println("error, '" + lineOfCOde.value + "' is invalid method declare");}
+        if(methodStrings.size() != 1){
+            throw new IOException("error, '" + lineOfCOde.value + "' is invalid method declare");
+        }
         String methodString = methodStrings.get(0);
         MethodData methodData = getMethodDataFromString(methodString);
         assert methodData != null;
         if(!Objects.equals(lineOfCOde.firstWord, methodData.name)){System.out.println("error, line.firstWord: " + lineOfCOde.firstWord + " != CycleOrConstruction name: " + methodData.name);}
         switch (methodData.name){
             case ifConstructionName -> {
-                if(methodData.args.size() != 1){System.out.println("error, " + ifConstructionName + " gets only 1 argument, provided " + methodData.args.size());}
+                if(methodData.args.size() != 1){
+                    throw new IOException("error, " + ifConstructionName + " gets only 1 argument, provided " + methodData.args.size());
+                }
                 return new IfCycle(methodData.args.get(0), insideCodeCodeParts, mathData);
             }
             case forCycleName -> {
-                if(methodData.args.size() != 3){System.out.println("error, " + forCycleName + " gets 3 argument, provided " + methodData.args.size());}
+                if(methodData.args.size() != 3){
+                    throw new IOException("error, " + forCycleName + " gets 3 argument, provided " + methodData.args.size());
+                }
                 return new ComplexForCycle(methodData.args.get(0), methodData.args.get(1), methodData.args.get(2), insideCodeCodeParts, mathData);
             }
             case whileCycleName -> {
-                if(methodData.args.size() != 1){System.out.println("error, " + whileCycleName + " get only 1 argument, provided " + methodData.args.size());}
+                if(methodData.args.size() != 1){
+                    throw new IOException("error, " + whileCycleName + " get only 1 argument, provided " + methodData.args.size());
+                }
                 return new WhileCycle(methodData.args.get(0), insideCodeCodeParts, mathData);
             }
         }
         return new Method(methodData.name, methodData.args, insideCodeCodeParts);
     }//for inside method case
-    private static CodePart getCycleOrConstructionCodePart(LineOfCode lineOfCOde, List<LineOfCode> insideCodeList){
+    private static CodePart getCycleOrConstructionCodePart(LineOfCode lineOfCOde, List<LineOfCode> insideCodeList) throws IOException {
         //inside code
         List<CodePart> insideCodeCodeParts = new ArrayList<>();
         int i = 0;
@@ -544,22 +589,32 @@ public interface MindScriptCompiler {
         }
         //CycleOrConstruction name
         List<String> methodStrings = findMethodsInExpression(lineOfCOde.value, mathData);
-        if(methodStrings.size() != 1){System.out.println("error, '" + lineOfCOde.value + "' is invalid method declare");}
+        if(methodStrings.size() != 1){
+            throw new IOException("error, '" + lineOfCOde.value + "' is invalid method declare");
+        }
         String methodString = methodStrings.get(0);
         MethodData methodData = getMethodDataFromString(methodString);
         assert methodData != null;
-        if(!Objects.equals(lineOfCOde.firstWord, methodData.name)){System.out.println("error, line.firstWord: " + lineOfCOde.firstWord + " != CycleOrConstruction name: " + methodData.name);}
+        if(!Objects.equals(lineOfCOde.firstWord, methodData.name)){
+            throw new IOException("error, line.firstWord: " + lineOfCOde.firstWord + " != CycleOrConstruction name: " + methodData.name);
+        }
         switch (methodData.name){
             case ifConstructionName -> {
-                if(methodData.args.size() != 1){System.out.println("error, " + ifConstructionName + " gets only 1 argument, provided " + methodData.args.size());}
+                if(methodData.args.size() != 1){
+                    throw new IOException("error, " + ifConstructionName + " gets only 1 argument, provided " + methodData.args.size());
+                }
                 return new IfCycle(methodData.args.get(0), insideCodeCodeParts, mathData);
             }
             case forCycleName -> {
-                if(methodData.args.size() != 3){System.out.println("error, " + forCycleName + " gets 3 argument, provided " + methodData.args.size());}
+                if(methodData.args.size() != 3){
+                    throw new IOException("error, " + forCycleName + " gets 3 arguments, provided " + methodData.args.size());
+                }
                 return new ComplexForCycle(methodData.args.get(0), methodData.args.get(1), methodData.args.get(2), insideCodeCodeParts, mathData);
             }
             case whileCycleName -> {
-                if(methodData.args.size() != 1){System.out.println("error, " + whileCycleName + " get only 1 argument, provided " + methodData.args.size());}
+                if(methodData.args.size() != 1){
+                    throw new IOException("error, " + whileCycleName + " get only 1 argument, provided " + methodData.args.size());
+                }
                 return new WhileCycle(methodData.args.get(0), insideCodeCodeParts, mathData);
             }
         }

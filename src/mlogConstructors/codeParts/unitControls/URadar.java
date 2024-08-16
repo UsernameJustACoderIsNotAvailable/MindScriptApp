@@ -5,6 +5,8 @@ import mlogConstructors.codeParts.ComplexCodePart;
 import mlogConstructors.codeParts.operations.ComplexOperation;
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
+
 import static mlogConstructors.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 import static mlogConstructors.mathEngine.MathematicalExpressionReader.readExpression;
 
@@ -34,16 +36,14 @@ public class URadar extends ComplexCodePart {
     URadarSortType uRadarSortType;
     ComplexOperation sortMode; // 1 - normal / 0 - reverse
     String returnVarName;
-    public URadar(URadarFilterType filter1, URadarSortType uRadarSortType, String sortModeExpression, String returnVarName, MathData mathData)
-    {
+    public URadar(URadarFilterType filter1, URadarSortType uRadarSortType, String sortModeExpression, String returnVarName, MathData mathData) throws IOException {
         this.filter1 = filter1;
         this.uRadarSortType = uRadarSortType;
         sortMode = readExpression(sortModeExpression, mathData);
         this.returnVarName = returnVarName;
         linesCount = 1 + sortMode.linesCount;
     }
-    public URadar(URadarFilterType filter1, URadarFilterType filter2, URadarSortType uRadarSortType, String sortModeExpression, String returnVarName, MathData mathData)
-    {
+    public URadar(URadarFilterType filter1, URadarFilterType filter2, URadarSortType uRadarSortType, String sortModeExpression, String returnVarName, MathData mathData) throws IOException {
         this.filter1 = filter1;
         this.filter2 = filter2;
         this.uRadarSortType = uRadarSortType;
@@ -51,8 +51,7 @@ public class URadar extends ComplexCodePart {
         this.returnVarName = returnVarName;
         linesCount = 1 + sortMode.linesCount;
     }
-    public URadar(URadarFilterType filter1, URadarFilterType filter2, URadarFilterType filter3, URadarSortType uRadarSortType, String sortModeExpression, String returnVarName, MathData mathData)
-    {
+    public URadar(URadarFilterType filter1, URadarFilterType filter2, URadarFilterType filter3, URadarSortType uRadarSortType, String sortModeExpression, String returnVarName, MathData mathData) throws IOException {
         this.filter1 = filter1;
         this.filter2 = filter2;
         this.filter3 = filter3;
@@ -63,7 +62,7 @@ public class URadar extends ComplexCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         allCycleCodeParts.add(sortMode);
         return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
                 String.format("uradar %s %s %s %s 0 %s %s",

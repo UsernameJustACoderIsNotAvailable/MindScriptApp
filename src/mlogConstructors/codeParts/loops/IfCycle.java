@@ -6,13 +6,14 @@ import mlogConstructors.codeParts.operations.ComplexOperation;
 import mlogConstructors.codeParts.otherLogics.Jump;
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
 import java.util.List;
 
 import static mlogConstructors.mathEngine.MathematicalExpressionReader.readExpression;
 
 public class IfCycle extends CycleCodePart {
     ComplexOperation condition;
-    public IfCycle(String conditionExpression, List<CodePart> insideCode, MathData mathData) {
+    public IfCycle(String conditionExpression, List<CodePart> insideCode, MathData mathData) throws IOException {
         super(insideCode, mathData);
         condition = readExpression(conditionExpression, mathData);
         //linesCount
@@ -24,7 +25,7 @@ public class IfCycle extends CycleCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         allCycleCodeParts.addAll(condition.insideOperations);
         int jumpLine = previousCPLastLineIndex + linesCount + 1;
         allCycleCodeParts.add(new Jump(Jump.BoolOperationType.equal, condition.finalVarName, "false", jumpLine, mathData));

@@ -5,6 +5,8 @@ import mlogConstructors.codeParts.ComplexCodePart;
 import mlogConstructors.codeParts.operations.ComplexOperation;
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
+
 import static mlogConstructors.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 import static mlogConstructors.mathEngine.MathematicalExpressionReader.readExpression;
 
@@ -23,7 +25,7 @@ public class Jump extends ComplexCodePart {
     BoolOperationType boolOperation;
     ComplexOperation firstArg, secondArg;
     int jumpToIndex;
-    public Jump(BoolOperationType boolOperation, String firstArgExpression, String secondArgExpression, int jumpToIndex, MathData mathData){
+    public Jump(BoolOperationType boolOperation, String firstArgExpression, String secondArgExpression, int jumpToIndex, MathData mathData) throws IOException {
         this.boolOperation = boolOperation;
         firstArg = readExpression(firstArgExpression, mathData);
         secondArg = readExpression(secondArgExpression, mathData);;
@@ -37,7 +39,7 @@ public class Jump extends ComplexCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         switch (boolOperation){
             case always -> {
                 return String.format("jump %s",

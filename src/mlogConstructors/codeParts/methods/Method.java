@@ -5,6 +5,7 @@ import mlogConstructors.codeParts.CodePart;
 import mlogConstructors.codeParts.ComplexCodePart;
 import mlogConstructors.codeParts.operations.Set;
 
+import java.io.IOException;
 import java.util.List;
 
 import static mlogConstructors.Settings.methodReturnLineString;
@@ -30,7 +31,7 @@ public class Method extends ComplexCodePart {
     }//должно быть вызвано перед сборкой всего кода
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         allCycleCodeParts.addAll(methodCode);
         allCycleCodeParts.add(new Set("@counter", methodReturnLineString + methodName));
         return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, methodNameSpace, uncompiledCode);

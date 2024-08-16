@@ -5,6 +5,8 @@ import mlogConstructors.codeParts.ComplexCodePart;
 import mlogConstructors.codeParts.operations.ComplexOperation;
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
+
 import static mlogConstructors.Settings.returnGarbageName;
 import static mlogConstructors.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 import static mlogConstructors.mathEngine.MathematicalExpressionReader.readExpression;
@@ -32,7 +34,7 @@ public class ULocate extends ComplexCodePart {
             String outXVar, String outYVar,
             String foundVar,
             String returnedBuildingVar,
-            MathData mathData) {
+            MathData mathData) throws IOException {
         this.objectToFind = objectToFind;
         this.group = group;
         this.enemy = readExpression(isEnemyExpression, mathData);
@@ -47,7 +49,7 @@ public class ULocate extends ComplexCodePart {
             String arg1,
             String arg2, String arg3,
             String arg4,
-            MathData mathData) {
+            MathData mathData) throws IOException {
         this.objectToFind = objectToFind;
         switch (objectToFind){
             case ore -> {
@@ -68,7 +70,7 @@ public class ULocate extends ComplexCodePart {
         linesCount = 1 + enemy.linesCount;
     }//other cases
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         allCycleCodeParts.add(enemy);
         return getAllCycleCodePartsAsCompiledCode(previousCPLastLineIndex, nameSpaceIndex, uncompiledCode) +
                 String.format("ulocate %s %s %s %s %s %s %s %s",

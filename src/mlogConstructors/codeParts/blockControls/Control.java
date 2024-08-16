@@ -4,6 +4,8 @@ import mlogConstructors.codeParts.ComplexCodePart;
 import mlogConstructors.codeParts.operations.ComplexOperation;
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
+
 import static mlogConstructors.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 import static mlogConstructors.mathEngine.MathematicalExpressionReader.readExpression;
 
@@ -24,7 +26,7 @@ public class Control extends ComplexCodePart {
     ComplexOperation y;
     String unitVarName;
     ComplexOperation shoot;
-    public Control(ControlType type, String arg1, String arg2, MathData mathData){
+    public Control(ControlType type, String arg1, String arg2, MathData mathData) throws IOException {
         this.type = type;
         switch (type){
             case color -> {
@@ -44,7 +46,7 @@ public class Control extends ComplexCodePart {
             }
         }
     }//config, color, enabled
-    public Control(ControlType type, String blockVarName, String xExpression, String yExpression, String shootExpression, MathData mathData){
+    public Control(ControlType type, String blockVarName, String xExpression, String yExpression, String shootExpression, MathData mathData) throws IOException {
         this.type = type;
         this.blockVarName = blockVarName;
         this.x = readExpression(xExpression, mathData);
@@ -52,7 +54,7 @@ public class Control extends ComplexCodePart {
         this.shoot = readExpression(shootExpression, mathData);
         linesCount = 1 + x.linesCount + y.linesCount + shoot.linesCount;
     }//shoot
-    public Control(ControlType type, String blockVarName, String unitVarName, String shootExpression, MathData mathData){
+    public Control(ControlType type, String blockVarName, String unitVarName, String shootExpression, MathData mathData) throws IOException {
         this.type = type;
         this.blockVarName = blockVarName;
         this.unitVarName = unitVarName;
@@ -61,7 +63,7 @@ public class Control extends ComplexCodePart {
     }//shootp
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         switch (type){
             case enabled -> {
                 allCycleCodeParts.add(enabled);

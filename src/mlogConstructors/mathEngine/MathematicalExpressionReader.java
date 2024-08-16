@@ -6,6 +6,7 @@ import mlogConstructors.codeParts.operations.ComplexOperation;
 import mlogConstructors.codeParts.operations.Operation;
 import mlogConstructors.codeParts.methods.CallMethod;
 
+import java.io.IOException;
 import java.util.*;
 
 import static compilers.methods.MethodsReader.findMethodsInExpression;
@@ -14,7 +15,7 @@ import static mlogConstructors.Settings.*;
 
 public class MathematicalExpressionReader {
     public static int nextExpressionIndex = 0;//потом придумать что-то, привязанное к конкретному коду
-    public static ComplexOperation readExpression(String expression, MathData mathData){
+    public static ComplexOperation readExpression(String expression, MathData mathData) throws IOException {
         ComplexOperation finalComplexOperation = null;
         //methods
         List<CodePart> finalCodePartsList = new ArrayList<>();
@@ -37,7 +38,7 @@ public class MathematicalExpressionReader {
         return finalComplexOperation;
     }
     //brackets expression
-    private static ComplexOperation readBracketsExpression(String expression, MathData mathData){
+    private static ComplexOperation readBracketsExpression(String expression, MathData mathData) throws IOException {
         int helpVarCount = 0;
         ComplexOperation finalComplexOperation = null;
         while (expression.contains("(") || expression.contains(")")){
@@ -59,7 +60,7 @@ public class MathematicalExpressionReader {
         else {finalComplexOperation.Add(complexOperation);}
         return finalComplexOperation;
     }
-    private static String getFirstInBracketsExpression(String expression){
+    private static String getFirstInBracketsExpression(String expression) throws IOException {
         boolean firstBracketFound = false;
         int openedBracketsCount = 0;
         int closedBracketsCount = 0;
@@ -81,13 +82,13 @@ public class MathematicalExpressionReader {
                 currentExpression.append(expression.charAt(i));
             }
             if(firstBracketFound && openedBracketsCount < closedBracketsCount){
-                System.out.println("openedBracketsCount < closedBracketsCount");return null;/*error*/
+                throw new IOException("openedBracketsCount < closedBracketsCount for expression: " + expression);
             }
         }
         return expression;
     }
     //line expression
-    private static ComplexOperation readLineExpression(String expression, MathData mathData, int helpVarCount){
+    private static ComplexOperation readLineExpression(String expression, MathData mathData, int helpVarCount) throws IOException {
         List<CodePart> operations = new ArrayList<CodePart>();
         List<MathUnit> mathUnits = divideLineExpressionIntoMathUnits(expression, mathData);
         String resultVarName = null;
@@ -102,11 +103,11 @@ public class MathematicalExpressionReader {
                     //assignment
                     if (mathUnit.operationIsAssignment == Operation.operationIsAssignment.assignment) {
                         if (operationIndex == 0 || operationIndex == mathUnits.size() - 1) {
-                            System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
+                            throw new IOException("no args for operator: " + mathUnit.stringValue);
                         }
                         if (mathUnits.get(operationIndex - 1).type != MathUnit.mathUnitType.wordOrValue &&
                                 mathUnits.get(operationIndex + 1).type != MathUnit.mathUnitType.wordOrValue) {
-                            System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
+                            throw new IOException("no args for operator: " + mathUnit.stringValue);
                         }
                         resultVarName = helpVarString + nextExpressionIndex + helpVarCount;
                         operations.add(new Operation(
@@ -122,11 +123,11 @@ public class MathematicalExpressionReader {
                     //binary
                     else if (mathUnit.operatorArgAmount == Operation.operatorArgAmount.binary) {
                         if (operationIndex == 0 || operationIndex == mathUnits.size() - 1) {
-                            System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
+                            throw new IOException("no args for operator: " + mathUnit.stringValue);
                         }
                         if (mathUnits.get(operationIndex - 1).type != MathUnit.mathUnitType.wordOrValue &&
                                 mathUnits.get(operationIndex + 1).type != MathUnit.mathUnitType.wordOrValue) {
-                            System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
+                            throw new IOException("no args for operator: " + mathUnit.stringValue);
                         }
                         resultVarName = helpVarString + nextExpressionIndex + helpVarCount;
                         operations.add(new Operation(
@@ -145,10 +146,10 @@ public class MathematicalExpressionReader {
                     else if (mathUnit.operatorArgAmount == Operation.operatorArgAmount.unary) {
                         if (mathUnit.operatorType == Operation.operatorType.not) {
                             if (operationIndex == mathUnits.size() - 1) {
-                                System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
+                                throw new IOException("no args for operator: " + mathUnit.stringValue);
                             }
                             if (mathUnits.get(operationIndex + 1).type != MathUnit.mathUnitType.wordOrValue) {
-                                System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
+                                throw new IOException("no args for operator: " + mathUnit.stringValue);
                             }
                             resultVarName = helpVarString + nextExpressionIndex + helpVarCount;
                             operations.add(new Operation(
@@ -164,10 +165,10 @@ public class MathematicalExpressionReader {
                         }
                         else if (mathUnit.operatorType == Operation.operatorType.convertToNegative) {
                             if (operationIndex == mathUnits.size() - 1) {
-                                System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
+                                throw new IOException("no args for operator: " + mathUnit.stringValue);
                             }
                             if (mathUnits.get(operationIndex + 1).type != MathUnit.mathUnitType.wordOrValue) {
-                                System.out.println("no args for operator: "+mathUnit.stringValue);return null;/*error*/
+                                throw new IOException("no args for operator: " + mathUnit.stringValue);
                             }
                             resultVarName = helpVarString + nextExpressionIndex + helpVarCount;
                             operations.add(new Operation(

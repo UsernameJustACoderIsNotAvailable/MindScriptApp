@@ -18,16 +18,20 @@ public class LineOfCode {
     public String value;
 
     public LineOfCode(String value){
-        this.value = value;
+        //value
+        this.value = value.split("//")[0];
         //is empty test
         isEmpty = true;
-        for(int i = 0; i < value.length(); i++){
-            if (value.charAt(i) != ' '){
+        for(int i = 0; i < this.value.length(); i++){
+            if (this.value.charAt(i) != ' '){
                 isEmpty = false;
             }
         }
-        spacing = getSpacing(value);
-        firstWord = getFirstWord(value);
+        //spacing
+        spacing = getSpacing(this.value);
+        //firstWord
+        firstWord = getFirstWord(this.value);
+        //type
         if(cyclesAndConstructions.contains(firstWord)){
             type = lineType.cycleOrConstruction;
             hasInsideCode = true;

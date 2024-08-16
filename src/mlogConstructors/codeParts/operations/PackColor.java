@@ -4,6 +4,8 @@ import mlogConstructors.UncompiledCode;
 import mlogConstructors.codeParts.ComplexCodePart;
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
+
 import static mlogConstructors.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 import static mlogConstructors.mathEngine.MathematicalExpressionReader.readExpression;
 
@@ -11,7 +13,7 @@ public class PackColor extends ComplexCodePart {
     String resultVarName;
     ComplexOperation r, g, b, a;// 0 - 1 float
 
-    public PackColor(String resultVarName, String rExpression, String gExpression, String bExpression, String aExpression, MathData mathData){
+    public PackColor(String resultVarName, String rExpression, String gExpression, String bExpression, String aExpression, MathData mathData) throws IOException {
         this.resultVarName = resultVarName;
         r = readExpression(rExpression, mathData);
         g = readExpression(gExpression, mathData);
@@ -20,7 +22,7 @@ public class PackColor extends ComplexCodePart {
         linesCount = 1 + r.linesCount + g.linesCount + b.linesCount + a.linesCount;
     }
 
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode){
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         allCycleCodeParts.add(r);
         allCycleCodeParts.add(g);
         allCycleCodeParts.add(b);

@@ -3,6 +3,7 @@ package mlogConstructors.codeParts.operations;
 import mlogConstructors.UncompiledCode;
 import mlogConstructors.codeParts.CodePart;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ComplexOperation extends CodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         StringBuilder resultCode = new StringBuilder();
         for(int i = 0; i < insideOperations.size(); i++){
             CodePart codePart = insideOperations.get(i);

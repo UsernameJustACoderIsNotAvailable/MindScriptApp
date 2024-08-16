@@ -5,6 +5,7 @@ import mlogConstructors.codeParts.methods.Method;
 import mlogConstructors.codeParts.otherLogics.End;
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
 import java.util.*;
 
 public class UncompiledCode {
@@ -30,17 +31,16 @@ public class UncompiledCode {
         }
     }
 
-    public Method getMethodByName(String methodName){
+    public Method getMethodByName(String methodName) throws IOException {
         for (Method method : methods) {
             if (Objects.equals(method.methodName, methodName)) {
                 return method;
             }
         }
-        System.out.println("method with name: " + methodName + " does not exists");
-        return(null);
+        throw new IOException("method with name: " + methodName + " does not exists");
     }
 
-    public String compile(){
+    public String compile() throws IOException {
         StringBuilder compiledCode = new StringBuilder();
         int previousCPLastLineIndex = -1;
         //codeParts compile

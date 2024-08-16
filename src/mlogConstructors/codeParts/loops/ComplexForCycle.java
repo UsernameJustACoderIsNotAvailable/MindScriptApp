@@ -1,5 +1,6 @@
 package mlogConstructors.codeParts.loops;
 
+import java.io.IOException;
 import java.util.List;
 
 import mlogConstructors.UncompiledCode;
@@ -17,7 +18,7 @@ public class ComplexForCycle extends CycleCodePart {
             String conditionExpression,
             String operationExpression,
             List<CodePart> insideCode,
-            MathData mathData) {
+            MathData mathData) throws IOException {
         super(insideCode, mathData);
         condition = readExpression(conditionExpression, mathData);
         operation = readExpression(operationExpression, mathData);
@@ -33,7 +34,7 @@ public class ComplexForCycle extends CycleCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         allCycleCodeParts.addAll(startValue.insideOperations);
         allCycleCodeParts.addAll(insideCode);
         allCycleCodeParts.addAll(operation.insideOperations);

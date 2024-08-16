@@ -2,11 +2,12 @@ package compilers.methods;
 
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface MethodsReader {
-    public static MethodData getMethodDataFromString(String methodString){
+    public static MethodData getMethodDataFromString(String methodString) throws IOException {
         //method name
         StringBuilder methodNameStringBuilder = new StringBuilder();
         int i = 0;
@@ -15,7 +16,7 @@ public interface MethodsReader {
             i++;
         }
         if(methodNameStringBuilder.isEmpty()){
-            System.out.println("method name in empty for callMethodString: " + methodString);return null;
+            throw new IOException("method name in empty for callMethodString: " + methodString);
         }
         String methodName = methodNameStringBuilder.toString();
         while (methodName.contains(" ")){ methodName = methodName.replace(" ",  "");}
@@ -70,7 +71,7 @@ public interface MethodsReader {
         return new MethodData(methodName, argsListString);
     }
 
-    static List<String> findMethodsInExpression(String expression, MathData mathData){
+    static List<String> findMethodsInExpression(String expression, MathData mathData) throws IOException {
         List<String> methods =  new ArrayList<>();
         if(expression.isEmpty()){return methods;}
         StringBuilder word = new StringBuilder();//потенциально имя метода
@@ -113,7 +114,7 @@ public interface MethodsReader {
                     methods.add(word.toString());
                 }
                 else {
-                    System.out.println("closedBracketsCount < openedBracketsCount for expression: " + expression);return null;/*error*/
+                    throw new IOException("closedBracketsCount < openedBracketsCount for expression: " + expression);
                 }
             }
             else {

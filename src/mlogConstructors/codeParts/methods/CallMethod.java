@@ -7,6 +7,7 @@ import mlogConstructors.codeParts.operations.Operation;
 import mlogConstructors.codeParts.operations.Set;
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class CallMethod extends ComplexCodePart {
     int methodIndex;
     List<ComplexOperation> ComplexOperationInArgs = new ArrayList<>();
     boolean returnsSomething;
-    public CallMethod(String methodName, String returnVarName, List<String> ComplexOperationInArgsExpressions, MathData mathData) {
+    public CallMethod(String methodName, String returnVarName, List<String> ComplexOperationInArgsExpressions, MathData mathData) throws IOException {
         returnsSomething = true;
         this.methodName = methodName;
         for(String expression: ComplexOperationInArgsExpressions){
@@ -35,7 +36,7 @@ public class CallMethod extends ComplexCodePart {
         }
         linesCount += 3; // еще 2 строчки для вызова метода и 1 для смены имени итоговой переменной на returnVarName
     }
-    public CallMethod(String methodName, List<String> ComplexOperationInArgsExpressions, MathData mathData) {
+    public CallMethod(String methodName, List<String> ComplexOperationInArgsExpressions, MathData mathData) throws IOException {
         returnsSomething = false;
         this.methodName = methodName;
         for(String expression: ComplexOperationInArgsExpressions){
@@ -49,7 +50,7 @@ public class CallMethod extends ComplexCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         Method methodToCall = uncompiledCode.getMethodByName(methodName);
         if(ComplexOperationInArgs.size() != methodToCall.args.size()){
             System.out.println(methodToCall.args.size() + " needed, provided " + ComplexOperationInArgs.size() + " for method, Named: " + methodName);

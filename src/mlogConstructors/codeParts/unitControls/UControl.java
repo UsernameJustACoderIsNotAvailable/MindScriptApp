@@ -5,6 +5,8 @@ import mlogConstructors.codeParts.ComplexCodePart;
 import mlogConstructors.codeParts.operations.ComplexOperation;
 import mlogConstructors.mathEngine.MathData;
 
+import java.io.IOException;
+
 import static mlogConstructors.codeParts.NameSpacesMethods.getVarNameWithPrefix;
 import static mlogConstructors.mathEngine.MathematicalExpressionReader.readExpression;
 
@@ -44,7 +46,7 @@ public class UControl extends ComplexCodePart {
         linesCount = 1;
     }//unbind, idle, stop, autoPathfind, payDrop, payEnter,
 
-    public UControl(UnitControlType unitControlType, String arg1, MathData mathData) {
+    public UControl(UnitControlType unitControlType, String arg1, MathData mathData) throws IOException {
         this.unitControlType = unitControlType;
         switch (unitControlType) {
             case boost, payTake -> {
@@ -58,7 +60,7 @@ public class UControl extends ComplexCodePart {
         }
     }//boost, payTake, flag
 
-    public UControl(UnitControlType unitControlType, String arg1, String arg2, MathData mathData) {
+    public UControl(UnitControlType unitControlType, String arg1, String arg2, MathData mathData) throws IOException {
         this.unitControlType = unitControlType;
         switch (unitControlType) {
             case move, pathfind, mine -> {
@@ -79,7 +81,7 @@ public class UControl extends ComplexCodePart {
         }
     }//move, pathfind, mine, itemDrop, targetp
 
-    public UControl(UnitControlType unitControlType, String arg1, String arg2, String arg3, MathData mathData) {
+    public UControl(UnitControlType unitControlType, String arg1, String arg2, String arg3, MathData mathData) throws IOException {
         this.unitControlType = unitControlType;
         switch (unitControlType) {
             case approach, target -> {
@@ -97,7 +99,7 @@ public class UControl extends ComplexCodePart {
         }
     }//approach, target, itemTake
 
-    public UControl(UnitControlType unitControlType, String arg1, String arg2, String arg3, String arg4, MathData mathData) {
+    public UControl(UnitControlType unitControlType, String arg1, String arg2, String arg3, String arg4, MathData mathData) throws IOException {
         this.unitControlType = unitControlType;
         x = readExpression(arg1, mathData);
         y = readExpression(arg2, mathData);
@@ -106,7 +108,7 @@ public class UControl extends ComplexCodePart {
         linesCount = 1 + x.linesCount + y.linesCount + someValue.linesCount;
     }//within
 
-    public UControl(UnitControlType unitControlType, String arg1, String arg2, String arg3, String arg4, String arg5, MathData mathData) {
+    public UControl(UnitControlType unitControlType, String arg1, String arg2, String arg3, String arg4, String arg5, MathData mathData) throws IOException {
         this.unitControlType = unitControlType;
         switch (unitControlType) {
             case build -> {
@@ -129,7 +131,7 @@ public class UControl extends ComplexCodePart {
     }
 
     @Override
-    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) {
+    public String getAsCompiledCode(int previousCPLastLineIndex, int nameSpaceIndex, UncompiledCode uncompiledCode) throws IOException {
         switch (unitControlType){
             case idle, stop, payDrop, payEnter, unbind, autoPathfind -> {return String.format("ucontrol %s", unitControlType.name()) + "\n";}
             case payTake, boost -> {
