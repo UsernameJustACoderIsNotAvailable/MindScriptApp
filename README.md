@@ -1,2 +1,2 @@
 # MindScriptApp
- compiles java-like code into mindustry mlog
+ compiles python-like code into mindustry mlog
