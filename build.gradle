@@ -4,8 +4,8 @@ apply plugin: 'maven-publish'
 group = 'com.github.UsernameJustACoderIsNotAvailable'
 version = '1.0'
 
-sourceCompatibility = JavaVersion.VERSION_18
-targetCompatibility = JavaVersion.VERSION_18
+sourceCompatibility = 1.8 // java 8
+targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
