@@ -17,11 +17,12 @@ public class Main {
     public static void main(String[] args) {
         UncompiledCode uncompiledCode;
         try {
-            uncompiledCode = convertCodeIntoUncompiledCode("sensor(uTI, @unit, @totalItems)\n" +
+            uncompiledCode = convertCodeIntoUncompiledCode(
+                    "sensor(uTI, @unit, @totalItems)\n" +
                     "if(uTI == 0):\n" +
-                    "  ucontrol(move, outx, outy)\n" +
-                    "  ucontrol(itemTake, core, @copper, 999)\n" +
-                    "  1 + ll(ds)");
+                    "ucontrol(move, outx, outy)\n" +
+                    "ucontrol(itemTake, core, @copper, 999)\n"
+            );
             System.out.println(uncompiledCode.compile());
         }
         catch (IOException e){
