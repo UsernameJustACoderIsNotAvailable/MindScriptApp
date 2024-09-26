@@ -1,6 +1,5 @@
-plugins {
-    id 'java'
-}
+apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 group = 'com.github.UsernameJustACoderIsNotAvailable'
 version = '1.0'
@@ -10,7 +9,6 @@ targetCompatibility = JavaVersion.VERSION_18
 
 repositories {
     mavenCentral()
-    maven { url 'https://www.jitpack.io' }
 }
 
 dependencies {
@@ -20,4 +18,12 @@ dependencies {
 java {
     withSourcesJar()
     withJavadocJar()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
 }
